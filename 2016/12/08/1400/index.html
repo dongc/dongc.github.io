@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Key In Http Protocol (二)：&#39;Connection&#39; | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="BriefHTTP works with request-response: client connects to server, performs a request and gets a response. Normally, the connection to an HTTP server is closed after each response. With HTTP keep-alive you keep the underlying TCP connection open until “certain criteria” are met.
+“Connection:keep-alive” is a method to allow the same tcp connection for HTTP conversation instead of opening a new one with each new request. 
+More simply put, it is a communication between the web server and the web browser that says “you can grab more than just one file at a time“. Interaction diagram as follows:
+
+That enable HTTP ‘keep-alive’ is callded ‘HTTP persistent connection‘. See HTTP persistent connection for some advantages , such as:  
+
+Lower CPU and memory usage : by opening and closing fewer TCP connections, CPU time is saved in routers and hosts (clients, servers, proxies, gateways, tunnels, or caches), and memory used for TCB (TCP control blocks) can be saved in hosts.
+Reduced latency : latency on subsequent requests is reduced since there is no time spent in TCP’s connection opening handshake.
+HTTP pipelining : HTTP requests and responses can be pipelined on a connection. Pipelining allows a client to make multiple requests without waiting for each response, allowing a single TCP connection to be used much more efficiently, with much lower elapsed time.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Key In Http Protocol (二)：&#39;Connection&#39;"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Key In Http Protocol (二)：&#39;Connection&#39;</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p>HTTP works with <strong>request-response</strong>: client connects to server, performs a request and gets a response. Normally, the connection to an HTTP server is closed after each response. With HTTP keep-alive you keep the underlying TCP connection open until “certain criteria” are met.</p>
+<p><strong>“Connection:keep-alive”</strong> is a method to allow the same tcp connection for HTTP conversation instead of opening a new one with each new request. </p>
+<p>More simply put, it is a communication between the web server and the web browser that says “<strong>you can grab more than just one file at a time</strong>“. Interaction diagram as follows:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/tcp_keepalive.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/tcp_keepalive.png" alt="tcp_keepalive"></a></p>
+<p>That enable HTTP ‘keep-alive’ is callded ‘<strong>HTTP persistent connection</strong>‘. See HTTP persistent connection for some advantages , such as:  </p>
+<ul>
+<li><strong>Lower CPU and memory usage</strong> : by opening and closing fewer TCP connections, CPU time is saved in routers and hosts (clients, servers, proxies, gateways, tunnels, or caches), and memory used for TCB (TCP control blocks) can be saved in hosts.</li>
+<li><strong>Reduced latency</strong> : latency on subsequent requests is reduced since there is no time spent in TCP’s connection opening handshake.</li>
+<li><strong>HTTP pipelining</strong> : HTTP requests and responses can be pipelined on a connection. Pipelining allows a client to make multiple requests without waiting for each response, allowing a single TCP connection to be used much more efficiently, with much lower elapsed time.</li>
+</ul>
+<a id="more"></a>
+<h3 id="How-enable-‘keep-alive’"><a href="#How-enable-‘keep-alive’" class="headerlink" title="How enable ‘keep-alive’?"></a>How enable ‘keep-alive’?</h3><p><strong style="font-size: 23px;">①</strong><strong> apache</strong></p>
+<p>Open up apache’s configuration file and look for the following settings. this file is called <code>httpd.conf</code>. The following settings are noteworthy : </p>
+<pre class="lang:default decode:true ">
+#
+# KeepAlive: Whether or not to allow persistent connections (more than
+# one request per connection). Set to "Off" to deactivate.
+#
+KeepAlive On
+
+#
+# MaxKeepAliveRequests: The maximum number of requests to allow
+# during a persistent connection. Set to 0 to allow an unlimited amount.
+# We recommend you leave this number high, for maximum performance.
+#
+MaxKeepAliveRequests 100
+
+#
+# KeepAliveTimeout: Number of seconds to wait for the next request from the
+# same client on the same connection.
+#
+KeepAliveTimeout 100
+</pre>
+
+<p><strong style="font-size: 23px;">②</strong><strong> nginx</strong></p>
+<p>keep-alive is enabled by default on nginx, however, in some cases, it can be disabled. You can enable it using <code>HttpCoreModule</code>. Look for the value keepalive_disable, which is in a lot of cases the reason why keep-alive is not working. Before enabling it, make sure to know the reason why it’s disabled in the first place before attempting any changes.</p>
+<p>As above, describes the advantages and ways of “keep-alive” mode. Here, take “<strong>Establish a TCP connection</strong>“ as example, analysis necessity of enabling keep-alive mode.</p>
+<h3 id="Why-enable-‘keep-alive’"><a href="#Why-enable-‘keep-alive’" class="headerlink" title="Why enable ‘keep-alive’?"></a>Why enable ‘keep-alive’?</h3><p>TCP连接并非真真地手牵手，而是双方共同维持的一组状态。因此，单单的一次握手，无法确保双方建立连接，需要经过“<strong>三次握手</strong>”，最终确认双方达成“建交”共识。一个TCP连接建立过程，如下图：</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/establish_tcp.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/establish_tcp.png" alt="establish_tcp"></a></p>
+<p>一个已建立的TCP连接由一对socket组成。socket以“FD（file descriptor）”的形式存放在客户端和服务端的内存中。针对不同的TCP连接，通过定义“<strong>四元组</strong>”进行唯一区别。“四元组”的结构如下：</p>
+<pre class="lang:default decode:true ">
+{
+  "dest_IP": "目标地址",
+  "dest_port": "目标地址端口",
+  "src_IP": "源地址",
+  "src_port": "源地址端口"
+}
+</pre>
+本地curl一下百度，对照客户端和服务端socket的四元组结构，如下：
+<pre class="lang:default decode:true ">
+client_socket：{
+  "dest_IP": "115.239.217.68",（百度IP）
+  "dest_port": "80",（端口）
+  "src_IP": "192.168.10.226",（本地IP）
+  "src_port": "58565" （临时分配的端口）
+}
+
+server_socket：{
+  "dest_IP": "192.168.10.226",
+  "dest_port": "58565",
+  "src_IP": "115.239.217.68",
+  "src_port": "80"
+}
+</pre>
+
+<p>一次TCP连接的建立会占用CPU、内存等资源，频繁地创建TCP连接将给CPU、内存带来压力。其次，TCP建立前的“<strong>三次握手（three-way handshake）</strong>”和“ <strong>慢启动（slow start）</strong>”会拖慢数据包传输进度。下文摘抄自《High Performance Browser Networking》一书中关于这两个因素的解读：</p>
+<blockquote>
+<p>To illustrate the impact of the three-way handshake and the slow-start phase
+on a simple HTTP transfer, let’s assume that our client in New York requests
+a 64 KB file from the server in London over a new TCP connection 
+, and the following connection parameters are in place:</p>
+<ul>
+<li>Roundtrip time: 56 ms</li>
+<li>Client and server bandwidth: 5 Mbps</li>
+<li>Client and server receive window: 65,535 bytes</li>
+<li>Initial congestion window: 10 segments ()</li>
+<li>Server processing time to generate response: 40 ms</li>
+<li>No packet loss, ACK per packet, GET request fits into single segment</li>
+</ul>
+<p><img src="http://odwh5mzb8.bkt.clouddn.com/tcp_threeway_1.png" alt="tcp_threeway"></p>
+<p>264 ms to transfer a 64 KB file on a new TCP connection with 56 ms roundtrip
+time between the client and server! By comparison, let’s now assume that the 
+client is able to reuse the same TCP connection (Figure 2-6) and issues the 
+same request once more.</p>
+<p><img src="http://odwh5mzb8.bkt.clouddn.com/tcp_no_threeway_1.png" alt="tcp_threeway"></p>
+<p>The same request made on the same connection, but without the cost of the
+three-way handshake and the penalty of the slow-start phase, now took 96
+milliseconds, which translates into a 275% improvement in performance!</p>
+<p>Congestion window size growth：</p>
+<p><img src="http://odwh5mzb8.bkt.clouddn.com/cwd.png" alt="tcp_threeway"></p>
+</blockquote>
+<p>① “<strong>三次握手</strong>”：确认双方达成一致‘连接’共识，是数据传送的前提。<br>
+② “<strong>慢启动</strong>”：通过“每次double上一次发送数据包”的试探方式，找到下行的带宽大小。避免发送端发送的数据包太大，接收端无力承受，导致数据丢失的情况发生。<br>
+这两个阶段，是一个新建立的TCP连接，必须经历的阶段。</p>
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li>browser：同时支持最多长连接数?</li>
+<li>apache：同时支持最多长连接数?</li>
+<li>nginx：同时支持最多长连接数?</li>
+</ul>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<h3 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h3><ul>
+<li><p><span style="text-decoration-line: underline;"><a href="https://varvy.com/pagespeed/keep-alive.html" target="_blank" rel="external">How to enable keep alive</a></span></p>
+</li>
+<li><p><span style="text-decoration-line: underline;"><a href="https://www.linangran.com/?p=547" target="_blank" rel="external">Use HAProxy to load balance 300k concurrent tcp socket connections</a></span></p>
+</li>
+<li><p><span style="text-decoration-line: underline;"><a href="https://www.nginx.com/blog/http-keepalives-and-web-performance/" target="_blank" rel="external">HTTP Keepalive Connections and Web Performance</a></span></p>
+</li>
+<li><p><span style="text-decoration-line: underline;"><a href="https://ma.ttias.be/enable-keepalive-connections-in-nginx-upstream-proxy-configurations/" target="_blank" rel="external">Enable Keepalive connections in Nginx Upstream proxy configurations</a></span></p>
+</li>
+<li><p><span style="text-decoration-line: underline;"><a href="https://varvy.com/pagespeed/slow-start.html" target="_blank" rel="external">TCP slow-start</a></span></p>
+</li>
+</ul>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<div style="text-align: center;color:red">
+<strong>（本文章非原创 由本人摘录整理）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/07/14/1335/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-12-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

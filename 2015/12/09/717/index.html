@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux I/O (一)：Nio Is Real &#39;Zero-Copy&#39;? | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="What Is ‘Zero-Copy’?Zero copy refers to a collection of techniques which reduce the number of copies of blocks of data in order to make data transfer more efficient. This helps reduce the number of unnecessary memory accesses and CPU consumption, and therefore enhance overall system performance.
+“零拷贝”并非字面上意思。下面以“一次网络数据包读取流程”为例，讲解什么是“零拷贝技术” ？
+采用“传统方式”，需要两次DMA拷贝，两次CPU拷贝。借用“sendfile()”方式，仅需要一次内存拷贝，两次DMA拷贝。
+two CPU copy &amp;nbsp;two DMA copy
+
+实例代码：
+
+    read(file, tmp_buf, len);
+    write(socket, tmp_buf, len);
+
+
+one CPU copy &amp;nbsp;two DMA copy">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux I/O (一)：Nio Is Real &#39;Zero-Copy&#39;?"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Linux I/O (一)：Nio Is Real &#39;Zero-Copy&#39;?</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="What-Is-‘Zero-Copy’"><a href="#What-Is-‘Zero-Copy’" class="headerlink" title="What Is ‘Zero-Copy’?"></a>What Is ‘Zero-Copy’?</h3><p>Zero copy refers to a collection of techniques which reduce the number of copies of blocks of data in order to make data transfer more efficient. This helps reduce the number of unnecessary memory accesses and CPU consumption, and therefore enhance overall system performance.</p>
+<p>“零拷贝”并非字面上意思。下面以“<strong>一次网络数据包读取流程</strong>”为例，讲解什么是“零拷贝技术” ？
+采用“传统方式”，需要两次DMA拷贝，两次CPU拷贝。借用“sendfile()”方式，仅需要一次内存拷贝，两次DMA拷贝。</p>
+<p><span style="text-decoration:underline;font-weight:bold">two CPU copy &nbsp;two DMA copy</span></p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/nio-traditional.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/nio-traditional.png" alt="nio-traditional"></a></p>
+<p><span class="s1">实例代码：</span></p>
+<pre class="lang:default decode:true  ">
+    read(file, tmp_buf, len);
+    write(socket, tmp_buf, len);
+</pre>
+
+<p><span style="text-decoration:underline;font-weight:bold">one CPU copy &nbsp;two DMA copy</span></p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/nio_sendfile.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/nio_sendfile.png" alt="nio_sendfile"></a></p>
+<a id="more"></a>
+<h3 id="‘Zero-Copy’-Techniques"><a href="#‘Zero-Copy’-Techniques" class="headerlink" title="‘Zero-Copy’ Techniques"></a>‘Zero-Copy’ Techniques</h3><p>Zero copy can be classified into two groups:</p>
+<ul>
+<li>reduce data copies between devices (disk or network card) and kernel buffers.</li>
+<li>reduce data copies between kernel buffers and application buffers.</li>
+</ul>
+<p><strong>DMA</strong>(Direct Memory Access): DMA allows special purpose hardware to read or write main memory without involving the CPU. which greatly reduces CPU consumption and also eliminates redundant data copies between device and kernel buffers.</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/simplified-logical-structure-of-a-system-with-DMA4.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/simplified-logical-structure-of-a-system-with-DMA4.png" alt="simplified logical structure of a system with DMA4"></a></p>
+<p><strong>Sendfile() </strong>: data are copied directly from the kernel buffer to the socket buffer. Once all data are copied into the socket buffer, the <strong>sendfile()</strong> system call will return to indicate the completion of data transfer from the kernel buffer to socket buffer. Then, data will be copied to the buffer on the network card and transferred to the network.
+The <strong>sendfile()</strong> method is much more efficient than the combination of <strong>read()</strong> and <strong>write()</strong>, Compared with the traditional data transmission method,which reduces the number of context switch from four to two. However, it still needs three data copies (<span style="color: #000000;"><strong>two DMA copies and one CPU copy</strong></span>) to finish the data transmission.</p>
+<p><strong>“sendfile()”</strong> source code：</p>
+<pre class="lang:c decode:true" title="linux sendfile()">
+
+#include <sys sendfile.h="">
+ssize_t sendfile(int out_fd, int in_fd, off_t *offset , size_t count);
+
+</sys></pre>
+
+<ul>
+<li>in_fd 等待读入数据的fd.</li>
+<li>out_fd 等待写出数据的fd.</li>
+<li>offset 开始读取数据之前向前偏移的byte数.</li>
+<li>count 两个fd之间“搬移”的数据的byte数.</li>
+</ul>
+<p>针对上层应用而言：java通过”<strong>channel.transferTo()</strong>“入口，调用底层linux的”<strong>sendfile()</strong>“方法，实现高性能数据传输。</p>
+<pre class="lang:java decode:true">
+
+public abstract long transferTo(long position, long count,
+                                WritableByteChannel target) throws IOException;
+
+</pre>
+
+<p>Channel categories：</p>
+<ul>
+<li>FileChannel</li>
+<li>DatagramChannel(UDP)</li>
+<li>SocketChannel(TCP)</li>
+<li>ServerSocketChannel(TCP)</li>
+<li>AsynchronousServerSocketChannel(TCP)</li>
+</ul>
+<p>&nbsp;</p>
+<h3 id="附-录"><a href="#附-录" class="headerlink" title="附 录"></a>附 录</h3><ul>
+<li><span style="text-decoration-line: underline; color: #0000ff;"><a href="http://www.kegel.com/c10k.html" target="_blank" rel="external">C10K</a></span>   <span style="color: #808080;"><em> linux</em></span></li>
+<li><span style="color: #0000ff;"><span style="text-decoration-line: underline;"><a href="http://www.linuxjournal.com/article/6345?page=0,0" target="_blank" rel="external">Zero Copy I: User-Mode Perspective</a></span> </span>    <span style="color: #808080;"><em>Dragan Stancevic</em></span></li>
+<li><span style="text-decoration-line: underline; color: #0000ff;"><a href="http://www.makelinux.net/ldd3/?u=chp-15-sect-3" target="_blank" rel="external">Memory Mapping and DMA</a></span>    <span style="color: #808080;"> </span><span style="color: #808080;"><em>Constantine Shulyupin</em></span><strong>
+</strong></li>
+<li><span style="text-decoration-line: underline; color: #0000ff;"><a href="https://github.com/giampaolo/pysendfile" target="_blank" rel="external">psendfile</a></span>  <span style="color: #666699;"><em>python sendfile(2) benchmark</em></span>
+&nbsp;</li>
+</ul>
+<p>&nbsp;</p>
+<div style="text-align: center;color:red">
+<strong>（转载本站文章请注明出处 <span style="text-decoration: underline;color:red"><a href="https://dongc.github.io/" target="_blank" rel="external">dongc.github.io</a></span> ，请勿用于任何商业用途）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/01/28/931/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/11/03/559/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-12-09 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

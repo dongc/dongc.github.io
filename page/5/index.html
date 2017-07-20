@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 5 页 | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header page-header-inverse ">
+  <h1 class="title title-inverse ">正襟危坐一码农</h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+        <!-- render top articles firstly -->
+        
+        <!-- render other articles -->
+        
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
+	<a href="/2015/01/20/146/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (三)：Constructor Function</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+	
+		<p>Constructor function create multiple objects that share certain qualities and behaviors.Constructor function like cookie cutter.Specific constructor function like cookie cutter templdate</p>
+<h3 id="Native-Built-in-Object-Constructor"><a href="#Native-Built-in-Object-Constructor" class="headerlink" title="Native/Built-in Object Constructor"></a>Native/Built-in Object Constructor</h3><ul>
+<li>Number()</li>
+<li>String()</li>
+<li>Boolean()</li>
+<li>Object()</li>
+<li>Array()</li>
+<li>Function()</li>
+<li>Date()</li>
+<li>RegExp()</li>
+<li>Error()</li>
+</ul>
+<h3 id="Array"><a href="#Array" class="headerlink" title="Array()"></a>Array()</h3><p>Array is <strong>Constructor function</strong>.</p>
+<pre class="lang:js decode:true">
+/**
+* @param {...*} [args]
+* @constructor
+* @template T
+*/
+function Array(args) {}
+
+/**
+* @param {...T|Array.<t>} [items]
+* @return {Array.<t>}
+*/
+Array.prototype.concat = function(items) {};
+</t></t></pre>
+
+<h3 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h3><p><strong>Static object</strong> for other methods</p>
+<pre class="lang:js decode:true">
+// Refer to ECMAScript,as Follows:
+Math = {};
+
+/**
+* @param {number} x
+* @static
+* @return {number}
+*/
+Math.abs = function(x) {};
+</pre>
+
+<p>&nbsp;</p>
+
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
+	<a href="/2015/01/20/134/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (二)：Primitive Datatype</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+	
+		<p><strong>Primitive</strong>(原生的) datatype stored in memory <strong>stack</strong>.It’s value is <strong>literally copied</strong>(字面值复制).Even if change the <strong>original</strong>(原始的) value,the copied value remians unchanged.</p>
+<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>undefined</li>
+<li>null</li>
+</ul>
+<p>When a primitive value is used as if it were an object created by a constructor, JavaScript converts it to an object in order to respond to the expression at hand,but then discards the object qualities and changes it back to a primitive value. In the code below, I take primitive values and showcase what happens when the values are treated like objects</p>
+<p><pre class="lang:js decode:true">
+    var pstr = “123”;
+    pstr.toString();
+    // pstr =&gt;Object =&gt;primitive</pre></p>
+<pre><code>var pnum = 123;
+pnum.toString();
+// pnum =&gt;Object =&gt;primitive
+
+var ostr = new String(&quot;123&quot;);
+ostr.toString();
+// ostr =&gt;primitive
+
+var onum = new Number(123);
+onum.toString();
+//onum =&gt;primitive
+</code></pre><p>
+&nbsp;</p>
+
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
+	<a href="/2015/01/12/105/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (一)：Functions As First-Class Things</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+	
+		<blockquote>
+<p>The term “first-class” means that something is just a value. A first-class function is one that can go anywhere that any other value can go—there are few to no restrictions. A number in JavaScript is surely a first-class thing, and therefore a first-class function has a similar nature.</p>
+<p>术语“<strong>first-class</strong>”仅表示一个数值，基础类Function可以出现“数值”能出现的任何地方（几乎没有限制）。number确实基础类在javascript中，因此基本类Function有相似的特性：</p>
+</blockquote>
+<ul>
+<li><p>a number can be stored in a variable and so can a function</p>
+<pre class="lang:js decode:true">var fortytwo = function() { return 42 };</pre>
+</li>
+<li><p>a number can be stored in an object field and so can a function:</p>
+<pre class="lang:js decode:true">var fortytwos = [42, function() { return 42 }];
+</pre>
+</li>
+<li><p>a number can be stored in an object field and so can a function:</p>
+<pre class="lang:js decode:true">var fortytwos = {number: 42, fun: function() { return 42 }};</pre>
+</li>
+<li><p>a number can be created as needed and so can a function:</p>
+<pre class="lang:js decode:true">42 + (function() { return 42 })();
+//=> 84</pre>
+</li>
+<li><p>a number can be passed to a function and so can a function:
+<pre class="lang:js decode:true">function weirdAdd(n, f) { return n + f() };</pre></p>
+</li>
+</ul>
+<p>weirdAdd(42, function() { return 42 });
+//=&gt; 84</p>
+<ul>
+<li>a number can be returned from a function and so can a function:<pre class="lang:js decode:true ">
+return 42;
+return function() { return 42 };
+</pre>
+&nbsp;</li>
+</ul>
+<p>&nbsp;</p>
+
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+<ul class="pagination">
+	 
+		
+    	<li class="prev"><a href="/page/4/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a></li>
+  		
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+		   <li class="next"> <a href="/page/6/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+        
+	
+</ul>
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+<div class="widget">
+	<h4>链接</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-link"></i><a href="http://martinfowler.com/" title="" target="_blank"]);">martinfowler</a></li>
+	
+		<li><i class="fa fa-link"></i><a href="http://jenkov.com/" title="" target="_blank"]);">jenkov</a></li>
+	
+		<li><i class="fa fa-link"></i><a href="http://coolshell.cn/" title="" target="_blank"]);">coolshell</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

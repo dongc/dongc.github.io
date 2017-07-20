@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux I/O (二)：A Process Of Reading Disk File | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="What’s IO?IO(Input/Output) is a system of communication for information processing systems. structure of information processing system, as follows:
+
+In computing, IO is the communication between an information processing system , such as a computer, and the outside world, possibly a human or another information processing systems, such as keyboards and mouse are input-only devices while devices such as printers are output-only. A writable CD-ROM is both an input and an output device. 
+IO is a system of communication, structure of IO system in linux, as follows:
+
+由上图可看出：设备驱动作为中间联络人，负责操作系统与设备之间信息交流，不同设备对应不同的设备驱动。
+
+IO subsystem：[向下] 通过安装设备驱动，横向扩展可访问设备种类；[向上]通过封装统一访问入口，降低上层应用访问各设备的复杂度。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Linux I/O (二)：A Process Of Reading Disk File"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Linux I/O (二)：A Process Of Reading Disk File</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="What’s-IO"><a href="#What’s-IO" class="headerlink" title="What’s IO?"></a>What’s IO?</h3><p><strong>IO</strong>(Input/Output) is a system of communication for information processing systems.<br> structure of information processing system, as follows:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" alt="information processing systems"></a>
+In computing, IO is the communication between an information processing system , such as a computer, and the outside world, possibly a human or another information processing systems, such as keyboards and mouse are input-only devices while devices such as printers are output-only. A writable CD-ROM is both an input and an output device. </p>
+<p>IO is a system of communication, structure of IO system in linux, as follows:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" alt="archetectureofkernelio"></a></p>
+<p>由上图可看出：设备驱动作为中间联络人，负责操作系统与设备之间信息交流，不同设备对应不同的设备驱动。
+<br>
+IO subsystem：[向下] 通过安装设备驱动，横向扩展可访问设备种类；[向上]通过封装统一访问入口，降低上层应用访问各设备的复杂度。</p>
+<a id="more"></a>
+<p>IO subsystem在linux操作系统中扮演承上启下的角色：“<strong>上承应用程序，下启设备驱动</strong>”。没了它，计算机就是一潭死水。
+<br></p>
+<p>下面以“<strong>一次硬盘文件读取</strong>”为例，介绍操作系统与设备之间如何进行IO交流。
+<br>
+<br></p>
+<h3 id="How-to-computer-communicate-with-disk？"><a href="#How-to-computer-communicate-with-disk？" class="headerlink" title="How to computer communicate with disk？"></a>How to computer communicate with disk？</h3><p>linux系统中一次硬盘文件的读取流程，如下图：</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/readfileprogress.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/readfileprogress.png" alt="readfileprogress"></a></p>
+<p>Steps, as follows：</p>
+<ol>
+<li>a process issues a read call which executes a system call</li>
+<li>system call code checks for correctness</li>
+<li>if it needs to perform I/O, it will issue a device driver call</li>
+<li>device driver allocates a buffer for read and schedules I/O</li>
+<li>controller performs DMA data transfer</li>
+<li>block the current process and schedule a ready process</li>
+<li>device generates an interrupt on completion</li>
+<li>interrupt handler stores any data and notifies completion</li>
+<li>move data from kernel buffer to user buffer</li>
+<li>wakeup blocked process (make it ready)</li>
+<li>user process continues when it is scheduled to run</li>
+</ol>
+<p>一次硬盘文件读过程纵跨三界：“用户空间、内核空间、硬盘空间”，主要涉案人员：“用户进程、CPU、设备控制器”。我们按图索骥，探究linux IO在此过程中都做了哪些性能优化：
+<br>
+<br></p>
+<h3 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h3><p><strong style="font-size: 23px;">①</strong> <strong>启用非阻塞模式：解放用户进程</strong>
+<br>
+常见设备大致为两种类型：<span style="text-decoration-line: underline; text-decoration-style: initial; text-decoration-color: initial;"><strong><a href="https://en.wikipedia.org/wiki/Device_file#Block_devices" target="_blank" rel="external">block devices</a> </strong></span>和 <span style="text-decoration-line: underline; text-decoration-style: initial; text-decoration-color: initial;"><strong><a href="https://en.wikipedia.org/wiki/Device_file#Character_devices" target="_blank" rel="external">character devices</a></strong></span>，block devices接收、发送一组字符；character devices接收、发送单个字符。</p>
+<p>disk驱动属于block devices，其提供给上层应用的接口(如: read、write<strong>)</strong>默认是阻塞模式。用户进程call system.read()后将一直阻塞。为了提高工作效率，linux增加”<strong>O_NONBLOCK</strong>“开关，开启非阻塞模式。这样，用户进程不必“<strong>busy-wait</strong>”，可以被解放出来干其他事情。</p>
+<p>在非阻塞模式下，用户进程如何被通知读取的数据已经就绪?  传统方式是：CPU轮询查看文件状态，找出就绪的文件，其缺点是：占用CPU大部分时间，导致CPU的利用率降低(花费在执行进程的时间减少)。于是，linux引入中断机制(<strong><span style="text-decoration-line: underline; text-decoration-style: initial; text-decoration-color: initial;"><a href="http://www.tldp.org/LDP/tlk/dd/interrupts.html" target="_blank" rel="external">interrupt mechanism</a></span></strong>)，解放CPU。
+<br>
+<br>
+<strong style="font-size: 23px;">②</strong>
+<strong>中断机制：解放CPU</strong>
+<br>
+引入中断机制之前：CPU发出读指令，将一直等待disk <span style="text-decoration-line: underline; text-decoration-style: initial; text-decoration-color: initial;"><strong><a href="https://en.wikipedia.org/wiki/File_descriptor" target="_blank" rel="external">FD</a></strong></span>数据就绪，白白浪费高性能的CPU资源。
+引入中断机制之后：CPU不必“<strong>busy-wait</strong>”，disk FD数据就绪时，发送中断请求给CPU。这样，高性能的CPU可以被解放出来干其他事情。</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/interrupt-mechanism.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/interrupt-mechanism.png" alt="interrupt mechanism"></a>
+<br>
+<strong style="font-size: 23px;">③</strong>
+<strong>DMA：提速块数据读写</strong>
+<br>
+<strong>DMA</strong>(Direct Memory Access): DMA allows special purpose hardware to read or write main memory without involving the CPU. which greatly reduces CPU consumption and also eliminates redundant data copies between device and kernel buffers.</p>
+<p>CPU把工作委托给DMA控制器，只在数据读取完毕后，由DMA控制器向CPU发送中断请求，告知CPU数据读取完毕。这样CPU被解脱出来。DMA工作原理图，如下:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/dmaworkprinciple.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/dmaworkprinciple.png" alt="dmaworkprinciple"></a>
+DMA详细介绍，参见：<span style="text-decoration-line: underline; text-decoration-style: initial; text-decoration-color: initial;"><strong><a href="http://dongc.me/wordpress/archives/717" target="_blank" rel="external">Linux I/O (一) : Nio Is Real ‘Zero-Copy’</a>?</strong></span>
+<br>
+<br>
+<strong style="font-size: 23px;">④</strong>
+<strong>IO bufferring：调和设备间速度不匹配</strong>
+<br>
+IO buffering aim to accommodate speed mismatch between the producer and consumer(<strong><span style="color: #999999;">设备延时对照，参照附录二</span></strong>), processes not must wait for I/O to complete before proceeding. IO buffering categories:</p>
+<ul>
+<li><strong>single buffering</strong>: operating system assigns a buffer in main memory for an I/O request.</li>
+<li><strong>double buffering</strong>: use two system buffers instead of one. a process can transfer data to or from one buffer while the operating system empties or fills the other buffer. （<strong><span style="color: #999999;">适用于video数据读取</span></strong>）</li>
+<li><strong>circular buffering</strong>：more than two buffers are used,each individual buffer is one unit in a circular buffer. (<strong><span style="color: #999999;">针对爆发式网络请求</span></strong>)
+<a href="http://odwh5mzb8.bkt.clouddn.com/IOBUFFERING2.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/IOBUFFERING2.png" alt="IOBUFFERING2"></a></li>
+</ul>
+<p>从memory读1M数据耗时0.25ms，从disk读1M数据耗时30ms。disk的延时是memory的100倍，导致内核进程大部分时间都在等待。因此在memory中增加缓存区，缓存来自disk的数据，一并做处理。
+<br>
+<br>
+<br></p>
+<h3 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h3><p>latency comparison numbers：</p>
+<pre class="lang:default decode:true ">
+  0.5 ns - CPU L1 dCACHE reference
+            1  ns - speed-of-light (a photon) travel a 1 ft (30.5cm) distance
+            5  ns - CPU L1 iCACHE Branch mispredict 
+            7  ns - CPU L2  CACHE reference
+          100  ns - MUTEX lock/unlock
+          100  ns - Main DDR MEMORY reference
+      10,000   ns - Compress 1K bytes with Zippy PROCESS
+      20,000   ns - Send 2K bytes over 1 Gbps NETWORK
+      250,000  ns - Read 1 MB sequentially from MEMORY
+      500,000  ns - Round trip within a same DataCenter
+  10,000,000   ns - DISK seek
+  10,000,000   ns - Read 1 MB sequentially from NETWORK
+  30,000,000   ns - Read 1 MB sequentially from DISK
+  150,000,000  ns - Send a NETWORK packet CA -> Netherlands
+</pre>
+
+<p><br>
+<br>
+<br>
+<br></p>
+<div style="text-align: center;color:red">
+<strong>（转载本站文章请注明出处 <span style="text-decoration: underline;color:red"><a href="https://dongc.github.io/" target="_blank" rel="external">dongc.github.io</a></span> ，请勿用于任何商业用途）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/12/08/1400/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2016/01/28/931/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-07-14 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

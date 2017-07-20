@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Javascript (六)：Know &#39;Closure&#39; Inside Out? | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="What is closure?In JavaScript, closures are often regarded as some sort of magical unicorn that only advanced developers can really understand, but truth be told it is just a simple understanding of the scope chain. A closure, as Douglas Crockford says, is simply:
+
+An inner function always has access to the vars and parameters of its outer function, even after the outer function has returned…
+
+The code below is an example of a closure:
+
+// ==&gt;进入全局执行上下文
+var dongcCard = card(&#39;dongc&#39;);
+
+dongcCard();
+
+function card(sname) {
+    var gender = &#39;male&#39;;
+    return function showInfo() {
+        console.log(&#39;[carInfo] name:%s gender:%s&#39;, sname, gender);
+    }
+}
+
+
+read above code , have two doubts:
+
+为何card函数在定义之前，可以被调用？
+为何card函数执行完毕后，card函数中“gender”属性仍然可以被访问？
+
+究其原由，深入内核底层，一探究竟。
+How do javascript engine work？The JavaScript interpreter in a browser is implemented as a single thread. Actions or Events being queued in what is called the execution stack. The diagram below is an abstract view of a single threaded stack:">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Javascript (六)：Know &#39;Closure&#39; Inside Out?"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Javascript (六)：Know &#39;Closure&#39; Inside Out?</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="What-is-closure"><a href="#What-is-closure" class="headerlink" title="What is closure?"></a>What is closure?</h3><p>In JavaScript, closures are often regarded as some sort of magical unicorn that only advanced developers can really understand, but truth be told it is just a simple understanding of the scope chain. A closure, as <strong><span style="text-decoration: underline;"><a href="https://en.wikipedia.org/wiki/Douglas_Crockford" target="_blank" rel="external">Douglas Crockford</a></span></strong> says, is simply:</p>
+<blockquote>
+<p>An inner function always has access to the vars and parameters of its outer function, even after the outer function has returned…</p>
+</blockquote>
+<p>The code below is an example of a closure:</p>
+<pre class="lang:default decode:true">
+// ==>进入全局执行上下文
+var dongcCard = card('dongc');
+
+dongcCard();
+
+function card(sname) {
+    var gender = 'male';
+    return function showInfo() {
+        console.log('[carInfo] name:%s gender:%s', sname, gender);
+    }
+}
+</pre>
+
+<p>read above code , have two doubts:</p>
+<ul>
+<li><strong>为何card函数在定义之前，可以被调用？</strong></li>
+<li><strong>为何card函数执行完毕后，card函数中“gender”属性仍然可以被访问？</strong></li>
+</ul>
+<p>究其原由，深入内核底层，一探究竟。</p>
+<h3 id="How-do-javascript-engine-work？"><a href="#How-do-javascript-engine-work？" class="headerlink" title="How do javascript engine work？"></a>How do javascript engine work？</h3><p>The JavaScript interpreter in a browser is implemented as a single thread. Actions or Events being queued in what is called the <span style="color: #000000;"><strong>execution stack</strong></span>. The diagram below is an abstract view of a single threaded stack:
+<a href="/images/ecstack.jpg"><img src="/images/ecstack.jpg" alt="ecstack"></a>
+<a id="more"></a>
+As we already know, when a browser first loads your script, it enters the<strong> </strong><span style="color: #000000;">global execution context</span> by default.
+The browser will always execute the current execution context that sits on top of the stack, and once the function completes executing the current execution context, it will be popped off the top of the stack, returning control to the context below in the current stack.There are 4 key points to remember about the execution stack:</p>
+<ul>
+<li>Single threaded</li>
+<li>Synchronous execution</li>
+<li>Global execution context</li>
+<li>Each function call creates a execution context
+the following describes the above-mentioned professional terms  <span style="color: #000000;"><strong>Execution Context</strong></span>.</li>
+</ul>
+<h4 id="Execution-context"><a href="#Execution-context" class="headerlink" title="Execution context"></a>Execution context</h4><blockquote>
+<p>An <dfn>execution context</dfn> is an abstract concept used by the ECMSScript specification <a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%203rd%20edition,%20December%201999.pdf" target="_blank" rel="external">(<strong><span style="text-decoration: underline;">ECMA 262 3rd edition</span></strong></a>) to define the behaviour required of ECMAScript implementations. The specification does not say anything about how <dfn>execution contexts</dfn> should be implemented but execution contexts have associated attributes that refer to specification defined structures so they might be conceived (and even implemented) as objects with properties, though not public properties. That is to say, <span style="color: #993300;"><span style="color: #000000;"><strong><em>when any javaScript code is executing, it needs some place to store its local variables. Let’s call this place as a scope object</em></strong></span>.</span></p>
+<p><strong>Scope object</strong> are allocated in heap instead (or at least they behave like this), so they might stay allocated even if function already returned. More on that later.</p>
+<p><span style="color: #808080;"><em>“执行上下文对象(scope object)”的特性，类似于java中对象类型(Object Type)。如果，该函数的“执行上下文对象”没有被其他函数作用域链所引用，就会被gc标记、回收。</em></span></p>
+</blockquote>
+<p>Execution context has two stage, as follows:</p>
+<ul>
+<li><span style="color: #000000;"><strong>Creation stage</strong></span>: the interpreter creates the executionContextObj by scanning the function for parameters or arguments passed in, local function declarations and local variable declarations. The result of this scan becomes the variableObject(<span style="color: #808080;">变量的值默认为undefined</span>) in the executionContextObj.</li>
+<li><span style="color: #000000;"><strong>Execution stage</strong></span>: assign values, references to functions and execute code(<span style="color: #808080;">变量赋值、this绑定、执行代码</span>)
+Under dom environment, divide into “Global execution context” and “Function execution context”</li>
+</ul>
+<p><strong>① Global execution context</strong>: a browser first loads your script, it enters the global execution context by default. it’s internal structure  as follows：</p>
+<pre class="lang:default decode:true">
+globalContext["VO"] = {
+    variables:'inner defined variable',
+    functions:'inner function declarations',
+    Math: 'js buitin function',
+    String:'js buitin function',
+    ...
+    this: 'window(当前执行对象)'
+};
+</pre>
+
+<p><strong>② Function execution context</strong>: function execution “<strong>environment</strong>“, it’s internal structure  as follows：</p>
+<pre class="lang:default decode:true">
+functionContext["VO"] ={
+    scopeChian:{/* variableObject + all parent execution context's variableObject */},
+    variableObject:{/* function arguments / parameters,inner variable and function declarations */},
+    this:{}
+}</pre>
+
+<ul>
+<li><strong>scopeChain</strong>: 定义函数执行时变量可搜索范围，类似<strong>prototypal inheritance</strong>。其内部包含“当前函数的执行上下文” 和 “上层父作用域的执行上下文” (<span style="color: #808080;">即 <strong><span style="text-decoration: underline;"><a href="http://dongc.me/wordpress/archives/193" title="Scope in Javascript" target="_blank" rel="external">Lexical Scope</a></span></strong></span>)。</li>
+<li><strong>variableObject</strong>: 用于存储函数内部定义的参数、变量、函数等相关信息。在函数被调用时，其内部的变量被重新赋值，生成新的对象压入到scope chain栈中。</li>
+<li><strong>this：</strong>执行该函数的当前对象。this角色可以被动态绑定（参见<span style="text-decoration: underline;"><strong><a href="http://dongc.me/wordpress/archives/193" title="Scope in Javascript" target="_blank" rel="external">Dynamic Scope</a></strong></span>）。</li>
+</ul>
+<p>上述介绍“作用域链”（<strong>scope chain</strong>：函数执行时变量搜索的范围），下面介绍js解析器如何找寻变量。</p>
+<h4 id="Resolving-the-value-of-variables"><a href="#Resolving-the-value-of-variables" class="headerlink" title="Resolving the value of variables"></a>Resolving the value of variables</h4><p>The interpreter <span style="color: #000000;"><strong>climb up scope chain to keeps checking each [VO] in sequence for the existence of the variable name</strong></span>, in which case the value will be returned to the original evaluated code, or the program will throw a ReferenceError if none is found.</p>
+<p><a href="/images/scopchain.png"><img src="/images/scopchain.png" alt="scopchain"></a></p>
+<p>The global scope is the last stop in the scope chain, therefore, variables defined in the global scope can be accessed from anywhere.</p>
+<p>有时，我们将上层父作用域中对象，引入到当前函数执行上下文。这样，js解析器不用“挨家挨户、苦苦找寻”，提高执行效率。实例代码如下：</p>
+<pre class="lang:js decode:true" title="实例代码二">
+(function(W,$){
+
+......
+
+})(window,jQuery);
+// 将'window','jQuery'以函数参数的身份,引入到当前函数执行上下文对象中，作其内部属性.</pre>
+
+<div style="text-align: center;color:red"> 
+    <b>全局对象局部化，避免interpreter苦苦寻觅</b>
+</div>
+
+
+<h3 id="Case-Analysis"><a href="#Case-Analysis" class="headerlink" title="Case Analysis"></a>Case Analysis</h3><p>剖析上述“实例代码一”，解答文章开头提出的两个疑问。<br>
+js执行过程可划分为两个阶段（<span style="color: #000000;"><strong>① 解析阶段 ② 执行阶段</strong></span>），类似于java先编译、后执行。其中，“解析阶段” 对应着函数的Creation stage，“执行阶段”对应着函数的Execution stage。</p>
+<p><strong>① 解析阶段</strong></p>
+<p>“实例代码一”中函数card的执行上下文对象：</p>
+<p><pre class="lang:default decode:true" title="card执行上下文对象">card[“VO”] ={
+    scopeChain:{,globalContext[“VO”]},
+    variableObject:{
+        ‘gender’:’undefined’,
+        ‘sname’:’undefined’
+    }
+    this:’undefined’
+};</pre>
+card函数收录内部变量gender、参数sname；及确定函数的词法作用域为“<strong>全局上下文</strong>”
+<br></p>
+<p>“实例代码一”中函数showInfo的执行上下文对象：</p>
+<p><pre class="lang:default decode:true" title="showInfo执行上下文对象">showInfo[“VO”] ={
+    scopeChain:{,card[“VO”] + globalContext[“VO”]},
+    variableObject:{},
+    this:’undefined’
+};</pre>
+确定showInfo函数的词法作用域为“<strong>card上下文对象</strong>” + “<strong>全局上下文</strong>”。
+<br></p>
+<p>“实例代码一”中全局执行上下文对象：</p>
+<p><pre class="lang:default decode:true  " title="全局执行上下文对象">globalContext[“VO”] = {
+    ‘dongcCard’:’undefined’,
+    ‘card’:’refer to card function’,
+    Math: ‘buitin function’,
+    String:’buitin function’,
+    …
+  this: ‘undefined’
+};</pre>
+“<strong>全局执行上下文对象</strong>” 收录在全局范围下定义的变量(dongcCard)、函数(card)及 js内建的函数(如：Math等)信息。所以，card函数在解析阶段，就被装载到全局上下文中。这就解释“ 为何函数card在定义之前，可以被调用？”产生原因<strong>。</strong></p>
+<p><strong>② 执行阶段</strong></p>
+<p>第 <strong>2 </strong>行代码调用card函数，创建新的执行上下文，压入到execution stack中。与此同时，生成新的执行上下对象，并对其内部变量进行赋值，压入到函数的作用域链中。此时，card函数执行上下文对象，内部结构如下：</p>
+<p><pre class="lang:default decode:true">card[“VO”]={
+    scopeChain:{card[“VO”]+globalContext[“VO”]},
+    variableObject:{
+        ‘gender’:’male’,
+        ‘sname’:’dongc’,
+    }
+    this:window
+};</pre>
+card函数执行完毕，返回函数showInfo，赋值给变量dongcCard(<span style="color: #808080;"><span style="color: #000000;"><strong>函数可以当’值’传递</strong></span>，参见 </span><span style="text-decoration: underline;"><strong><a href="http://dongc.me/wordpress/archives/105" title="Functions as First-Class Things" target="_blank" rel="external">Functions as First-Class Things</a></strong></span>)，dongcCard指向showInfo函数。此时，showInfo的执行上下文对象结构如下：</p>
+<p><pre class="lang:default decode:true ">showInfo[“VO”]={
+    scopeChain:{,card[“VO”]+globalContext[“VO”]},
+    variableObject:{},
+    this:’undefined’
+};</pre>
+由于，card函数执行时，生成的card[“VO”]仍被showInfo函数的作用域链引用，因此，card[“VO”]不会被gc回收。</p>
+<p><span style="line-height: 1.5;">第 4 行代码dongcCard函数执行时，仍然可以访问到gender属性。这就解释“</span><span style="color: #000000;">为何函数card执行完毕后，card中”gender”属性仍然可以被访问？</span><span style="line-height: 1.5;">”产生的原因。上述“</span>实例代码一<span style="line-height: 1.5;">”的执行堆栈图，如下：</span>
+<a href="/images/EC24.gif"><img src="/images/EC24.gif" alt="EC24"></a></p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>Closures are functions that refer to independent (free) variables. In other words, the function defined in the closure “remembers” the environment in which it was created.
+Technically, in JavaScript, <strong>“<span style="color: #000000;">Every Function Is A Closure” </span></strong>. It always has an access to variables defined in the surrounding scope.</p>
+<p>&nbsp;</p>
+<h3 id="附-录"><a href="#附-录" class="headerlink" title="附 录"></a>附 录</h3><ul>
+<li><span style="text-decoration: underline;"><a href="http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/" target="_blank" rel="external">Execution Context &amp; Stack</a></span>    <span style="color: #808080;">&nbsp;&nbsp; <em>David Shariff</em></span></li>
+<li><span style="text-decoration: underline;"><a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank" rel="external">Immediately-Invoked Function Expression</a></span>     <span style="color: #808080;">&nbsp;&nbsp; <em>Ben Alman</em></span></li>
+</ul>
+<p><br>
+<br>
+<br></p>
+<div style="text-align: center;color:black"><b>“框架太多，回归原生”</b></div>
+
+<p><br>
+<br>
+<br></p>
+<div style="text-align: center;color:red">
+<strong>（转载本站文章请注明出处 <span style="text-decoration: underline;color:red"><a href="https://dongc.github.io/" target="_blank" rel="external">dongc.github.io</a></span> ，请勿用于任何商业用途）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/12/09/717/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/09/11/479/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-11-03 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

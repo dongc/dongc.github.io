@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Key In Http Protocol (一)：&#39;Cache-Control&#39; | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="BriefHTTP (Hypertext Transfer Protocol) is perhaps the most popular application protocol used in the Internet (or The WEB).
+HTTP is an asymmetric request-response client-server protocol as illustrated.  An HTTP client sends a request message to an HTTP server.  The server, in turn, returns a response message.
+In other words, HTTP is a pull protocol, the client pulls information from the server (instead of server pushes information down to the client).
+HTTP is a client-server application-level protocol.
+
+① http response message
+
+② http request message">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Key In Http Protocol (一)：&#39;Cache-Control&#39;"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Key In Http Protocol (一)：&#39;Cache-Control&#39;</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p><span style="line-height: 1.5;">HTTP (</span><strong>Hypertext Transfer Protoco</strong><span style="line-height: 1.5;">l) is perhaps the most popular application protocol used in the Internet (or The WEB).</span></p>
+<p>HTTP is an asymmetric request-response client-server protocol as illustrated.  An HTTP client sends a request message to an HTTP server.  The server, in turn, returns a response message.</p>
+<p>In other words, HTTP is a pull protocol, the client pulls information from the server (instead of server pushes information down to the client).</p>
+<p>HTTP is a client-server application-level protocol.</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP.png" alt="HTTP"></a></p>
+<p><strong>① http response message</strong></p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" alt="HTTP_ResponseMessageExample"></a></p>
+<p><strong>② http request message</strong></p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" alt="HTTP_RequestMessageExample"></a></p>
+<a id="more"></a>
+<p>&nbsp;</p>
+<h3 id="‘Cache-Control’-Key"><a href="#‘Cache-Control’-Key" class="headerlink" title="‘Cache-Control’ Key"></a>‘Cache-Control’ Key</h3><p>Cache-Control header was defined as part of the HTTP/1.1 specification and supersedes previous headers (e.g. Expires) used to define response caching policies. All modern browsers support Cache-Control, hence that is all we will need.</p>
+<p>Each resource can define its caching policy via Cache-Control HTTP header Cache-Control directives control who can cache the response, under which conditions, and for how long.</p>
+<table>
+<thead>
+<tr>
+<th style="
+    width: 30%;
+">Cache-Control 指令</th>
+<th>说明      </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>max-age=86400</strong></td>
+<td>浏览器和任何intermediary caches缓存均可以将响应（如果是public的）缓存长达一天（60 秒 x 60 分 x 24 小时）</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>private, max-age=600</strong></td>
+<td>客户端浏览器只能将响应缓存最长 10 分钟（60 秒 x 10 分）</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>no-store</strong></td>
+<td>不允许缓存响应，每个请求必须获取完整的响应。</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>no-cache</strong></td>
+<td>表示必须先与服务器确认返回的响应是否被更改，然后才能使用该响应来满足后续对同一个网址的请求。因此，如果存在合适的验证令牌 (ETag)，no-cache 会发起往返通信来验证缓存的响应，如果资源未被更改，可以避免下载。</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Defining optimal Cache-Control policy</strong></p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/http-cache-decision-tree.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/http-cache-decision-tree.png" alt="http-cache-decision-tree"></a></p>
+<p>浏览器发出的所有 HTTP 请求会首先被路由到浏览器的缓存，以查看是否缓存了可以用于实现请求的有效响应。如果有匹配的响应，会直接从缓存中读取响应，这样就避免了网络延迟以及传输产生的数据成本。然而，如果我们希望更新或废弃已缓存的响应，该怎么办？</p>
+<p>例如，假设我们已经告诉访问者某个 CSS 样式表缓存长达 24 小时 (max-age=86400)，但是设计人员刚刚提交了一个更新，我们希望所有用户都能使用。我们该如何通知所有访问者缓存的 CSS 副本已过时，需要更新缓存？
+很简单，在资源内容更改时，我们可以更改资源的网址，强制用户下载新响应。通常情况下，可以通过在文件名中嵌入文件的指纹码（或版本号）来实现 - 例如 style_x234dff.css。 图片：</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/http-cache-hierarchy.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/http-cache-hierarchy.png" alt="http-cache-hierarchy"></a></p>
+<p>上述方案的具体实践，可参考<span style="text-decoration-line: underline;"><a href="http://fis.baidu.com/fis3/index.html" target="_blank" rel="external">百度的FIS3</a></span>。</p>
+<p><strong>Caching checklist:</strong></p>
+<ol>
+<li>Use consistent URLs</li>
+<li>Ensure the server provides a validation token (ETag)</li>
+<li>Identify which resources can be cached by intermediaries</li>
+<li>Determine the optimal cache lifetime for each resource</li>
+<li>Determine the best cache hierarchy for your site</li>
+<li>Minimize churn</li>
+</ol>
+<p>&nbsp;</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><ul>
+<li><span style="text-decoration-line: underline;"><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching?hl=en" target="_blank" rel="external">Google HTTP Caching</a></span></li>
+<li><span style="text-decoration-line: underline;"><a href="http://fis.baidu.com/fis3/index.html" target="_blank" rel="external">Baidu FIS3</a></span></li>
+</ul>
+<p><br>
+<br></p>
+<div style="text-align: center;color:black">
+    <b>“The best request : not need to communicate with server”</b>
+</div>
+
+<p><br>
+<br>
+<br></p>
+<div style="text-align: center;color:red">
+<strong>（本文章非原创 由本人摘录整理）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2016/07/14/1335/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/12/09/717/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-01-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

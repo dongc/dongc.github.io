@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Javascript (五)：Scope | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="ScopeIn javaScript, scope is the context in which code is executed.Typically, scope is used to define the extent of information hiding—that is, the visibility(可见性) or accessibility(可访问性) of variables from different parts of the program.
+
+Global Scope
+Function Scope
+Block Scope
+Lexical Scope
+Dynamic Scope
+
+Global ScopeThe global scope is the last stop in the scope chain . Therefore, variables defined in the global scope can be accessed from anywhere . Danger is that any piece of code can change global variables for any reason at any time.
+// g1 be created in global scope
+var g1 = 123; 
+
+// global scope
+(function() {
+    // g be created in global scope
+    g2 = 123; 
+})();
+
+变量声明不推荐lack var。缺少var的变量被称为implied globals。 implied globals会污染全局环境、导致代码很难管理.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Javascript (五)：Scope"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Javascript (五)：Scope</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h3><p>In javaScript, <strong>scope</strong> is the context in which code is executed.Typically, <strong>scope</strong> is used to define the extent of information hiding—that is, the <strong>visibility(可见性)</strong> or <strong>accessibility(可访问性)</strong> of variables from different parts of the program.</p>
+<ul>
+<li>Global Scope</li>
+<li>Function Scope</li>
+<li>Block Scope</li>
+<li><strong><span style="color: #000080;">Lexical Scope</span></strong></li>
+<li>Dynamic Scope</li>
+</ul>
+<h3 id="Global-Scope"><a href="#Global-Scope" class="headerlink" title="Global Scope"></a>Global Scope</h3><p>The <strong>global scope</strong> is the last stop in the <strong>scope chain </strong>. Therefore, variables defined in the global scope can be accessed from anywhere . <span style="color: #ff0000;">Danger is that<strong> </strong>any piece of code can change global variables for any reason at any time</span>.</p>
+<pre class="lang:js decode:true">// g1 be created in global scope
+var g1 = 123; 
+
+// global scope
+(function() {
+    // g be created in global scope
+    g2 = 123; 
+})();</pre>
+
+<p>变量声明不推荐lack <strong>var</strong>。缺少<strong>var</strong>的变量被称为<strong>implied globals</strong>。 <strong>implied globals</strong>会污染全局环境、导致代码很难管理.</p>
+<a id="more"></a>
+<h3 id="Function-Scope"><a href="#Function-Scope" class="headerlink" title="Function Scope"></a>Function Scope</h3><p>Any variable which is defined within a function is visible within that entire function,not accessible outside of function</p>
+<p>Function内部定义变量仅内部可见，可借助<strong>closure feature</strong>提供公共对外访问入口。类比java通过<strong>private</strong>隐藏变量、通过<strong>public</strong>提供公共对外访问入口。</p>
+<pre class="lang:js decode:true">function foo(){
+    // private 
+    var name ="dongc";
+
+    return {
+        // public entrance
+        getName:function(){
+            return name;
+        }
+    }
+}</pre>
+
+<h3 id="Block-Scope"><a href="#Block-Scope" class="headerlink" title="Block Scope"></a>Block Scope</h3><p>In theory, any variable is defined in block which is limited by the <strong>block</strong>(<strong>{curly braces}</strong>). But current version of ECMAScript does not support block-level scope.</p>
+<pre class="lang:js decode:true">var x =10;
+if(true){
+    var x =20;
+    console.log("inner:"+x);
+}
+console.log("outer:"+x);</pre>
+
+<p>However, some implementations (e.g. SpiderMonkey since 1.7 version) support alternative <strong>let</strong> instruction which allows the block-level scope. This instruction will be standardize in the future <strong>ES6</strong> version:</p>
+<pre class="lang:js decode:true">let x = 10;
+if (true) {
+    let x = 20;
+    console.log(x); // 20
+}
+console.log(x); // 10</pre>
+Instruction **let** though is a syntactic sugar for the construction which may be implemented in the **ES3** version. The example above desugars to the following code:
+<span style="color: #ff0000;">
+将第二个变量"x"藏匿于Function Content内，避免污染外部环境(Global Content).
+</span>
+
+<pre class="lang:default decode:true">var x = 10;
+if (true) {
+    (function(x) {
+        console.log(x); // 20
+    })(20);
+}
+console.log(x); // 10</pre>
+
+<h3 id="Lexical-Static-Scope"><a href="#Lexical-Static-Scope" class="headerlink" title="Lexical (Static) Scope"></a>Lexical (Static) Scope</h3><blockquote>
+<p>In static scoping, an identifier refers to its nearest lexical environment. The word “lexical” in this case relates to a property of a program text. I.e. where lexically in the source text a variable appears (that is, the exact place in the code) — in that scope it will be resolved later at runtime on referencing this variable. The word “<strong>environment</strong>” implies again something that lexically surrounds the definition.</p>
+<p><strong>通俗说: Lexical Scope</strong>是Function的”<strong>出生环境</strong>“。作为Function的静态属性(<strong>[[scope]]</strong>)存在，伴随一生。<strong>Lexical Scope</strong>在”<strong>出生时</strong>“就被确定。</p>
+</blockquote>
+<pre class="lang:js decode:true">// 全局环境 中国
+function jiangsu(){ //江苏
+    function suqian(){ //宿迁
+        function shuyang(){ //沭阳
+            function dongc(){ // dongc
+            }
+        }
+    }   
+}
+
+出生地(dongc) =[沭阳县 宿迁市 江苏省 中国]
+
+Function(dongc).[[scope]] =[shuyang,suqian,jiangsu,china]</pre>
+
+<h3 id="Dynamic-Scope"><a href="#Dynamic-Scope" class="headerlink" title="Dynamic Scope"></a>Dynamic Scope</h3><blockquote>
+<p>In <strong>Execution Phase</strong>,This is most often determined by how a function is invoked.</p>
+<p>函数的调用者（<strong>this</strong>）在函数执行阶段才被指定。</p>
+<p>When a function is called as a method of an object, this is set to the object the method is called on.</p>
+<p>When called as an unbound function, this will default to the <strong>global context</strong> or window object in the browser. However, if the function is executed in <strong>strict mode</strong>, the context will default to undefined.</p>
+</blockquote>
+<pre class="lang:js decode:true">function foo(){
+    console.log("invoker is :%o",this);
+};
+foo();
+// invoker is :Window<br>
+var obj =new Object();
+obj["name"] ="dongc";
+obj["foo"] =foo;
+obj.foo();
+// invoker is :Object<br>
+function foo1(){
+    "use strict"
+    console.log("invoker is :%o",this);
+};
+foo1() ;
+// invoker is :undefined<br>
+// dynamically bind this 
+foo.call(obj);
+foo.apply(obj); 
+</pre>
+
+<p>其次，可以通过调用<strong>call</strong>或<strong>apply</strong>函数，动态指定当前执行对象(<strong>this</strong>)。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/02/06/207/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/01/21/158/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-02-01 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

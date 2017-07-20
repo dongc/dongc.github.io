@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Refactor (一) ：Refactor As A Routine Work | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="What refactor ?Refactoring is done to fill in short-cuts, eliminate duplication and dead code, and to make the design and logic clear.Always to simplify the code and to make it easier to understand. Always to make it easier and safer to change in the future.
+Why refactor ?
+代码写得脏
+
+可读性差、逻辑不清，导致问题不断，阻碍快速迭代开发。
+迫于“时间紧迫、需求易变、编码能力”，那时那刻“思路不清晰”地写出“不堪入目”代码。
+
+框架单薄，无力支持
+
+随着业务量增加，现有的架构太单薄，无力支持庞大的业务量，不得不“Large Scale Refactoring”。
+How refactor ?
+Confirm your understanding of code
+
+首先弄懂代码、增加必要注释。针对业务复杂的，借助UML梳理业务
+
+Make refactor safe
+
+Regression test your refactoring work and Reviewing all of these changes , ensure that you haven’t changed the behavior – it still works the same.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Refactor (一) ：Refactor As A Routine Work"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Refactor (一) ：Refactor As A Routine Work</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="What-refactor"><a href="#What-refactor" class="headerlink" title="What refactor ?"></a>What refactor ?</h3><p>Refactoring is done to fill in short-cuts, eliminate duplication and dead code, and to make the design and logic clear.Always to simplify the code and to make it easier to understand. Always to make it easier and safer to change in the future.</p>
+<h3 id="Why-refactor"><a href="#Why-refactor" class="headerlink" title="Why refactor ?"></a>Why refactor ?</h3><ul>
+<li><strong>代码写得脏</strong></li>
+</ul>
+<p>可读性差、逻辑不清，导致问题不断，阻碍快速迭代开发。</p>
+<p>迫于“时间紧迫、需求易变、编码能力”，那时那刻“思路不清晰<span style="text-decoration: underline;">”</span>地写出“不堪入目”代码。</p>
+<ul>
+<li><strong>框架单薄，无力支持</strong></li>
+</ul>
+<p>随着业务量增加，现有的架构太单薄，无力支持庞大的业务量，不得不“<strong>Large Scale Refactoring</strong>”。</p>
+<h3 id="How-refactor"><a href="#How-refactor" class="headerlink" title="How refactor ?"></a>How refactor ?</h3><ul>
+<li><strong>Confirm your understanding of code</strong></li>
+</ul>
+<p>首先弄懂代码、增加必要注释。针对业务复杂的，借助UML梳理业务</p>
+<ul>
+<li><strong>Make refactor safe</strong></li>
+</ul>
+<p>Regression test your refactoring work and Reviewing all of these changes , ensure that you haven’t changed the behavior – it still works the same.</p>
+<a id="more"></a>
+<ul>
+<li><strong>Make refactor simple</strong></li>
+</ul>
+<p><strong><span style="text-decoration: underline;"><a href="http://refactoring.com/" title="Martin Fowler" target="_blank" rel="external">Refactoring patterns</a> </span></strong>and refactoring tools in modern IDEs make refactoring easy, safe and cheap.
+Refactoring can and should be folded in to how you write and maintain code – a part of the everyday discipline of development, like writing tests and reviewing code. It should be done <strong>quietly</strong>, <strong>continuously</strong> and <strong>implicitly</strong>. It becomes part of the cost of doing work, folded in to estimates and risk assessments. Done properly, it doesn’t need to be explained or justified.</p>
+<h3 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h3><ul>
+<li><p><strong>写代码 </strong>似于<strong> 写字</strong><br>
+写得“赏心悦目”：那是个人水平问题。水平不济只能勤加练习。<br>
+写得“清楚明白”：那是个人态度问题。是一笔一画，还是草草了事。</p>
+</li>
+<li><p><strong>写代码 </strong>有别于<strong> 写字</strong><br>
+写字：”<strong>一笔下去，重不临摹”</strong> ；写代码：”<strong>反复推敲”</strong>。</p>
+</li>
+</ul>
+<p>因为写代码，需要一定逻辑思维活动。这就是为什么，有些写得条理清晰，有些写得一团乱麻。建议事先在草稿纸上写伪代码，然后再实现编码，对于Geek而言：不必“<span style="color: #000000;"><strong>过分设计</strong></span>”、编写详细文档。
+<br>
+<br>
+个人愚见：“字写得不错的人，写出的代码都不会太差”。<br>
+总之，起码要写得让人明白；要写出水平，还待后天勤奋（<span style="color: #000000;"><strong>多看源码、多敲键盘</strong></span>）。
+<br>
+<br>
+下列场景，建议不去编码 “<strong><span style="color: #000000;">过于劳累时不去编码；和家人在一起时不去编码”</span></strong>。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div style="text-align: center;color:black">
+    “<strong>Don’t Live with Broken Windows</strong>“
+</div>
+
+<p>&nbsp;</p>
+<h3 id="附-录"><a href="#附-录" class="headerlink" title="附 录"></a>附 录</h3><ul>
+<li><p><span style="text-decoration: underline;"><a href="http://refactoring.com/catalog/" target="_blank" rel="external">catalog of refactorings</a></span>    <span style="color: #808080;"><em>Martin Fowler</em></span></p>
+</li>
+<li><p><span style="text-decoration: underline;"><a href="http://www.it-ebooks.info/book/1441/" title="clean code" target="_blank" rel="external">clean code</a></span>    <span style="color: #808080;"><em>Robert Cecil Martin</em></span></p>
+</li>
+<li><p><span style="text-decoration: underline;"><a href="http://www.artima.com/intv/fixitP.html" target="_blank" rel="external">Don’t Live with Broken Windows </a></span>  <span style="color: #808080;"><em>Bill Venners</em></span></p>
+</li>
+</ul>
+<p>&nbsp;
+&nbsp;</p>
+<div style="text-align: center;color:red">
+<strong>（转载本站文章请注明出处 <span style="text-decoration: underline;color:red"><a href="https://dongc.github.io/" target="_blank" rel="external">dongc.github.io</a></span> ，请勿用于任何商业用途）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/11/03/559/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/03/11/285/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-09-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

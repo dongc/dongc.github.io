@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java (二)：Tired Of Null Pointer Exception | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="Brief
+A wise man once said you are not a real Java programmer until you’ve dealt with a null pointer exception.
+没有处理过空指针，不算是真正的JAVA程序员
+
+A NullPointerException at runtime and stop your program from running further.imagine if your program was running on a customer’s machine; what would your customer say if the program suddenly failed?
+
+To give some historical context, Tony Hoare—one of the giants of computer science—wrote, “I call it my billion-dollar mistake. It was the invention of the null reference in 1965. I couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement.
+空指针造成十亿美元的损失
+Let’s start with an example to see the dangers of Null. a nested object structure for a Computer, as illustrated：
+
+
+&amp;nbsp;
+String version = computer.getSoundcard().getUsb().getVersion();
+
+How do avoid making NullPointerException ?">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Java (二)：Tired Of Null Pointer Exception"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Java (二)：Tired Of Null Pointer Exception</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><blockquote>
+<p>A wise man once said you are not a real Java programmer until you’ve dealt with a null pointer exception.
+没有处理过空指针，不算是真正的JAVA程序员</p>
+</blockquote>
+<p>A NullPointerException at runtime and stop your program from running further.imagine if your program was running on a customer’s machine; what would your customer say if the program suddenly failed?</p>
+<blockquote>
+<p>To give some historical context, Tony Hoare—one of the giants of computer science—wrote, “I call it my billion-dollar mistake. It was the invention of the null reference in 1965. I couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement.</p>
+<p>空指针造成十亿美元的损失
+Let’s start with an example to see the dangers of <strong>Null</strong>. a nested object structure for a Computer, as illustrated：</p>
+</blockquote>
+<p><a href="/images/OPTIONAL-1.png"><img src="/images/OPTIONAL-1.png" alt="OPTIONAL"></a></p>
+<p>&nbsp;</p>
+<pre class="lang:java decode:true">String version = computer.getSoundcard().getUsb().getVersion();</pre>
+
+<p><span style="color: #000000;"><strong>How do avoid making NullPointerException ?</strong></span></p>
+<a id="more"></a>
+<h3 id="Verbose-null-check"><a href="#Verbose-null-check" class="headerlink" title="Verbose null check"></a>Verbose null check</h3><p><span style="color: #0000ff;"><em>API providers , irresponsible to return NULL directly.</em></span></p>
+<p>Caller cautiously invoke API,  afraid of making NullPointerException. Furthermore, it is an error-prone process; what if you forget to check that one property could be null?</p>
+<p>Verbose null check,  As a result,  it’s just annoying that these checks get in the way of the business logic, they are decreasing the overall readability of our program and make code <strong>verbose</strong> and <strong>ugly</strong>.
+Caller每日疲于Check Null,难免烦躁. 正所谓 “<strong>埋头排雷心意烦</strong>, <strong>怒向案板觅屠刀</strong>“ </p>
+<pre class="lang:java decode:true ">
+if (computer != null) {
+    SoundCard soundCard = computer.getSoundCard();
+    if (soundCard != null) {
+        Usb usb = soundCard.getUsb();
+        if (usb != null) {
+            String version = usb.getVersion();
+            if (version != null) {
+                System.out.print(version.toUpperCase());
+            }
+        }
+    }
+}
+</pre>
+
+<h3 id="Force-caller-to-handle-checked-exception"><a href="#Force-caller-to-handle-checked-exception" class="headerlink" title="Force caller to handle checked exception"></a>Force caller to handle checked exception</h3><p><span style="color: #0000ff;"> Caring API providers,  throw Checked Exception when Object is null ,  force caller to handle exception <strong>explicity</strong>.You can no longer  <span style="color: #000000;"><strong>Forget To do It</strong></span></span>.</p>
+<ul>
+<li><p>defined checked exception</p>
+<pre class="lang:java decode:true">
+public class DefinedObjectNullException extends Exception {
+
+public DefinedObjectNullException(String message) {
+    super(message);
+}
+}</pre>
+</li>
+<li><p>get SoundCard interface:</p>
+<pre class="lang:java decode:true">
+public SoundCard getSoundcard() throws DefinedObjectNullException {
+
+if(this.soundcard ==null){
+    throw new DefinedObjectNullException("soundCard is null");
+}
+
+return soundcard;
+}</pre>
+</li>
+<li><p>get Usb interface:</p>
+<pre class="lang:java decode:true">
+public Usb getUsb() throws DefinedObjectNullException {
+
+if(this.usb ==null){
+    throw new DefinedObjectNullException("Usb is null");
+}
+
+return usb;
+}</pre>
+</li>
+<li><p>get Usb’s version of Computer:</p>
+<pre class="lang:java decode:true">
+String usbVersion =null;
+try {
+&nbsp;&nbsp;&nbsp;SoundCard soundCard =computer.getSoundcard();
+&nbsp;&nbsp;&nbsp;Usb usb =soundCard.getUsb();
+&nbsp;&nbsp;&nbsp;usbVersion =usb.getVersion();
+} catch (DefinedObjectNullException e) {
+&nbsp;&nbsp;&nbsp;LOGGER.error(e.getMessage());
+&nbsp;&nbsp;&nbsp;usbVersion ="absent";
+}
+</pre>
+
+</li>
+</ul>
+<h3 id="Use-java8’s-Optional-explicitly"><a href="#Use-java8’s-Optional-explicitly" class="headerlink" title="Use java8’s Optional explicitly"></a>Use java8’s Optional explicitly</h3><p>Optional as a single-value container that either contains a value or doesn’t (it is then said to be “empty”).</p>
+<pre class="lang:java decode:true">
+// soundcard maybe null,encapsulates an optional
+public Optional<soundcard> getSoundCard() {
+    return Optional.ofNullable(soundCard);
+}<br>
+// Usb maybe null,encapsulates an optional
+public Optional<usb> getUsb() {
+    return Optional.ofNullable(usb);
+}<br>
+// caller forced to check whether main object is null before use main object 
+Optional<soundcard> optionalSoundCard = computer.getSoundCard();
+if(optionalSoundCard.isPresent()){
+    SoundCard soundCard = optionalSoundCard.get();
+    Optional<usb> optionUsb =soundCard.getUsb();
+    if(optionUsb.isPresent()){
+        Usb usb=optionUsb.get();
+        System.out.print(usb.getVersion());
+    }
+}
+</usb></soundcard></usb></soundcard></pre>
+
+<p><strong>Optional</strong> 与 <strong>Throw Checked Exception</strong> 实现意图相同，就实现方式而言：“前者Optional很友好、后者很粗暴”。</p>
+<p>如果你还没尝java8,可以用Google Guava中Optional。</p>
+<h3 id="设计之初，尽量避免"><a href="#设计之初，尽量避免" class="headerlink" title="设计之初，尽量避免"></a>设计之初，尽量避免</h3><p>“<span style="color: #000080;"><strong>对外服务接口，杜绝return null</strong>”。</span>服务接口提供者不要轻易“<strong>return null</strong>”。不然，调用者会小心翼翼使你的接口，生怕踩着雷。就算在接口文档中，写明接口可能返回Null，也难阻止调用者一时疏忽、忘记”check null”。所以，接口提供者如何处理“<strong>接口可能返回Null</strong>”的方式，就体现出个人情怀。</p>
+<ul>
+<li><p><span style="text-decoration: underline;"><strong>放任不管</strong></span>：直接<strong>return null</strong>。</p>
+</li>
+<li><p><span style="text-decoration: underline;"><strong>好心好意</strong></span>：接口文档中写明可能会返回null。</p>
+</li>
+<li><p><span style="text-decoration: underline;"><strong>不顾一切</strong></span>：接口提供者判断接口返回值，”<strong>IF null THEN throw checked Exception</strong>“,强迫调用者捕获、绝不让空指针冒出。</p>
+</li>
+<li><p><span style="text-decoration: underline;"><strong>十全十美</strong></span>：针对接口可能返回null情况，通过Optional包装返回值，避免将null直接丢给调用者。这样，<strong>从编码层次</strong>，通过<strong>Optional</strong>标签更显著、更有效地警示调用者“接口可能返回Null”。</p>
+</li>
+</ul>
+<p>&nbsp;</p>
+<p><span style="color: #000080;">“设置对象属性，建议primitive type” 。</span>
+<span style="text-decoration: underline;">
+<a href="http://dongc.me/wordpress/archives/273" title="Why Use Primitive Types In Java ?" target="_blank" rel="external">primitive type</a></span> 自带默认值；非要是Object Type，建议手动设置默认值，因为Object Type这货缺省是null。</p>
+<p>其次，对于对象属性值是对应表字段转换而来的情况（例如：Mybatis）。建议建表时，设置字段“<strong>not null</strong> <strong>Default ‘value’ “</strong>。这样，不仅可以提高表索引效率，而且不用提心吊胆使对象属性(属性是Object type类型)。</p>
+<p><br>
+<br>
+<br></p>
+ <div style="text-align: center;color:black"><strong>“Return Null  Don’t Pass Null”</strong></div>
+
+<p><br>
+<br>
+<br></p>
+<div style="text-align: center;color:red">
+<strong>（转载本站文章请注明出处 <span style="text-decoration: underline;color:red"><a href="https://dongc.github.io/" target="_blank" rel="external">dongc.github.io</a></span> ，请勿用于任何商业用途）</strong>
+</div>	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/09/11/479/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/03/08/273/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-03-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

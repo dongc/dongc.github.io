@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java (一)：Why Use Primitive Types In Java ? | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="Not everything in java is an object !Java has a dual-type system, include Primitive Types and Object Types. Primitive types are value-based, but object types are reference-based.
+There are eight primitive types predefined in Java. For each primitive type there is a corresponding wrapper class that is an object type.
+Why use primitive type ?The most important factor to consider for using primitive types in Java are performance, software performance is usually measured in terms of space and time.
+space. java can use primitive types to create automatic variables (local variable 局部变量) that are not references. The variables hold the value, and it’s place on the stack(栈) so its much more efficient.
+Creating an object using new isn’t very efficient because new will place objects on the heap(堆). This approach would be very costly for small and simple variables.
+a single double occupy 8 bytes , a single Double occupy 24 bytes.
+
+primitive types创建的局部变量所占的空间，方法执行完后自动被释放掉；object types所占的空间，需触发GC回收, 方才释放。
+
+
+Runtime Performance
+
+To compare the runtime performances for primitives and objects, we need an algorithm dominated by numerical calculations. For this article I have chosen matrix multiplication, and I compute the time required to multiply two 1000-by-1000 matrices.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Java (一)：Why Use Primitive Types In Java ?"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Java (一)：Why Use Primitive Types In Java ?</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Not-everything-in-java-is-an-object"><a href="#Not-everything-in-java-is-an-object" class="headerlink" title="Not everything in java is an object !"></a>Not everything in java is an object !</h3><p>Java has a <strong>dual-type</strong> system, include <strong>Primitive Types</strong> and <strong>Object Types</strong>. Primitive types are <strong>value-based</strong>, but object types are<strong> reference-based</strong>.</p>
+<p>There are <span style="text-decoration: underline;"><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">eight primitive types</a></span> predefined in Java. For each primitive type there is a corresponding wrapper class that is an object type.</p>
+<h3 id="Why-use-primitive-type"><a href="#Why-use-primitive-type" class="headerlink" title="Why use primitive type ?"></a>Why use primitive type ?</h3><p>The most important factor to consider for using primitive types in Java are <strong>performance, </strong>software performance is usually measured in terms of <strong>space</strong> and <strong>time</strong>.</p>
+<p><strong>space. </strong>java can use primitive types to create automatic variables (<strong>local variable </strong>局部变量) that are not references. The variables hold the value, and it’s place on the <strong>stack</strong>(栈) so its much more efficient.</p>
+<p>Creating an object using new isn’t very efficient because new will place objects on the <strong>heap</strong>(堆). This approach would be very costly for small and simple variables.</p>
+<pre class="">a single double occupy 8 bytes , a single Double occupy 24 bytes.
+</pre>
+primitive types创建的局部变量所占的空间，方法执行完后自动被释放掉；object types所占的空间，需触发GC回收, 方才释放。
+<br>
+<br>
+<span style="text-decoration: underline;"><b>Runtime Performance</b></span>
+<br>
+To compare the runtime performances for primitives and objects, we need an algorithm dominated by numerical calculations. For this article I have chosen matrix multiplication, and I compute the time required to multiply two 1000-by-1000 matrices.
+
+<a id="more"></a>
+
+<pre title="Runtime Environment">
+MacBook Pro
+处理器：2.7 GHz Intel Core i5
+内存：8 GB 1867 MHz DDR3
+java version "1.8.0_45"
+Java(TM) SE Runtime Environment (build 1.8.0_45-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.45-b02, mixed mode)
+</pre>
+
+<pre class="lang:default decode:true " title="Time Test Code">
+public static void main(String[] args) {
+        // all matrices are n by n
+        int n = 1000;
+
+        // initialize matrices
+        double a1[][] = new double[n][n];
+        double b1[][] = new double[n][n];
+        Double a2[][] = new Double[n][n];
+        Double b2[][] = new Double[n][n];
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                double xa = Math.random();
+                a1[i][j] = xa;
+                a2[i][j] = xa;
+
+                double xb = Math.random();
+                b1[i][j] = xb;
+                b2[i][j] = xb;
+            }
+        }
+
+        StopWatch timer = new StopWatch();
+
+        // test first with matrices of double
+        timer.start();
+        double c1[][] = MatrixUtil.multiply(a1, b1);
+        timer.stop();
+
+        double totalTime1 = timer.getElapsedTimeInSeconds();
+        System.out.println("total time in for double = " + totalTime1 + " seconds");
+        System.out.println();
+
+        // test second with matrices of Double
+        timer.start();
+        Double c2[][] = MatrixUtil.multiply(a2, b2);
+        timer.stop();
+
+        double totalTime2 = timer.getElapsedTimeInSeconds();
+        System.out.println("total time for Double = " + totalTime2 + " seconds");
+        System.out.println();
+    }
+</pre>
+<pre title="Result" class="">total time in for double = 5.379 seconds
+total time for Double = 29.36 seconds
+</pre>
+<pre class="lang:default decode:true" title="Memory Test Code">    
+public static void main(String[] args)
+      {
+        int n = 1000;
+
+        long bytesUsingWrappers   = getBytesUsingWrappers(n);
+        long bytesUsingPrimitives = getBytesUsingPrimitives(n);
+
+        System.out.println("Using wrappers:");
+        System.out.println("- total bytes = " + bytesUsingWrappers);
+        System.out.println("- bytes per element = " + ((double) bytesUsingWrappers)/(n*n));
+        System.out.println();
+        System.out.println("Using primitives:");
+        System.out.println("- total bytes = " + bytesUsingPrimitives);
+        System.out.println("- bytes per element = " + ((double) bytesUsingPrimitives)/(n*n));
+      }
+
+    /**
+     * Returns the number of bytes used by an n-by-n matrix of type double.
+     * @param  the number of rows and columns of the matrix 
+     */
+    public static long getBytesUsingPrimitives(int n)
+      {
+        System.gc();   // force garbage collection
+        long memStart = Runtime.getRuntime().freeMemory();
+        double[][] a = new double[n][n];
+
+        // put some random values in the matrix
+        for (int i = 0;  i < n;  ++i)
+          {
+            for (int j = 0; j < n;  ++j)
+                a[i][j] = Math.random();
+          }
+
+        long memEnd = Runtime.getRuntime().freeMemory();
+
+        return memStart - memEnd;
+      }
+
+    /**
+     * Returns the number of bytes used by an n-by-n matrix of type Double.
+     * @param  the number of rows and columns of the matrix 
+     */
+    public static long getBytesUsingWrappers(int n)
+      {
+        System.gc();   // force garbage collection
+        long memStart = Runtime.getRuntime().freeMemory();
+        Double[][] a = new Double[n][n];
+
+        // put some random values in the matrix
+        for (int i = 0;  i < n;  ++i)
+          {
+            for (int j = 0; j < n;  ++j)
+                a[i][j] = Math.random();
+          }
+
+        long memEnd = Runtime.getRuntime().freeMemory();
+
+        return memStart - memEnd;
+      }
+  }
+</pre>
+<pre title="Result" class="">Using wrappers:
+- total bytes = 27965112
+- bytes per element = 27.965112
+
+Using primitives:
+- total bytes = 8756688
+- bytes per element = 8.756688
+</pre>
+
+<h3 id="Object-types存在NullPointerException隐患"><a href="#Object-types存在NullPointerException隐患" class="headerlink" title="Object types存在NullPointerException隐患"></a>Object types存在NullPointerException隐患</h3><p>Usually I go with the primitives. However, one peculiarity of using classes like Integer and Boolean is the possibility of assigning null to those variables. Of course, this means that you have to do null checks all the time, but still better to get a NullPointerException than to have logic errors due to using some int or boolean variable that has not been initialized correctly.</p>
+<h3 id="Be-careful-with-autoboxing-and-unboxing"><a href="#Be-careful-with-autoboxing-and-unboxing" class="headerlink" title="Be careful with autoboxing and unboxing."></a>Be careful with autoboxing and unboxing.</h3><p>Because autoboxing and unboxing take time, and because intermediate wrapper objects are created during the boxing operation (which can lead to garbage collection), never box/unbox in a lengthy loop, especially where performance is critical.</p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>Primitives are essential for applications dominated by <strong>numerical calculations</strong>.</p>
+<p>In general, you should use primitives wherever you need them, unless you discover that you need object support,using Object wrappers is generics where you have to use some Class. For example such collections as <strong>List<integer></integer></strong> or <strong>Map<integer, double=""></integer,></strong>.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/03/11/285/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/02/12/241/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-03-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
