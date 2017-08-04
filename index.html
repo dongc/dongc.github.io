@@ -127,9 +127,76 @@
 		
             
 		
+            
+		
         
         <!-- render other articles -->
         
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
+	<a href="/2017/08/04/20170804/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">MySQL索引(一)：正确、有效地使用索引</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+	
+		<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><ol>
+<li>什么是索引？</li>
+<li>索引分类</li>
+<li>创建原则</li>
+<li>使用注意</li>
+<li>案例</li>
+</ol>
+<h3 id="什么是索引？"><a href="#什么是索引？" class="headerlink" title="什么是索引？"></a>什么是索引？</h3><p>MySQL官方定义：“<strong>Index (索引)</strong>”是帮助MySQL高效获取数据的数据结构。“<strong>Index (索引)</strong>”本质是一种数据结构，存储在磁盘上。MySQL普遍使用<code>B+Tree</code>作为索引结构。</p>
+<p><strong>Linear Searh</strong>: 
+<a href="http://odwh5mzb8.bkt.clouddn.com/-linear_search.gif" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/-linear_search.gif" alt="tcp_keepalive"></a></p>
+<p><strong>B+Tree Search</strong>:
+<a href="http://odwh5mzb8.bkt.clouddn.com/binary-search-tree-sorted-array-animation.gif" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/binary-search-tree-sorted-array-animation.gif" alt="tcp_keepalive"></a></p>
+<h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><p>按照索引列的值必须唯一：</p>
+<ul>
+<li><strong>普通索引</strong> ：允许索引列中插入重复值和空值</li>
+<li><strong>唯一索引</strong> ：索引列的值必须唯一，但允许为空值。主键索引是一种特殊的唯一索引，不允许有空值。</li>
+</ul>
+<p>按照索引列组成的个数：</p>
+<ul>
+<li><strong>单列索引</strong>：索引只包含单个列，一个表可以有多个单列索引。</li>
+<li><strong>组合索引</strong>：多个字段组合，创建的索引。遵循“<strong>最左前缀原则</strong>”</li>
+</ul>
+<p>其他索引：</p>
+<ul>
+<li><strong>全文索引（FULLTEXT）</strong>：在定义索引列上支持值得全文查找。</li>
+</ul>
+<h3 id="创建原则"><a href="#创建原则" class="headerlink" title="创建原则"></a>创建原则</h3><ol>
+<li>2000条以上建议建索引</li>
+<li>组合索引：最左前缀原则，“选择性”高的列排在前面。</li>
+<li>“选择性”低的列不建议建立索引。<code>Index Selectivity = Cardinality / #T </code></li>
+<li>尽量地扩展原有索引，不建议新建索引</li>
+<li>字符串尽量使用短索引</li>
+</ol>
+<h3 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h3><ol>
+<li>隐式类型转换，无法命中索引，扫描全表（<code>建议按照字段类型传值</code>）。</li>
+<li>参与计算（<code>函数和表达式</code>）的列，不走索引。</li>
+<li>“负向查询”不走索引。</li>
+<li>前导模糊查询不能走索引。如：<code> like ‘%xxx’</code></li>
+</ol>
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2017/08/04/20170804/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
            
            <div class="post">
 			  
@@ -193,41 +260,6 @@ In computing, IO is the communication between an information processing system ,
 IO subsystem：[向下] 通过安装设备驱动，横向扩展可访问设备种类；[向上]通过封装统一访问入口，降低上层应用访问各设备的复杂度。</p>
 		<!-- only display read_more button if there's more to display -->
 		<a type="button" style="font-size:15px" href="/2016/07/14/1335/#more" class="more">Read More...</a>
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2016/01/28/931/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Key In Http Protocol (一)：&#39;Cache-Control&#39;</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p><span style="line-height: 1.5;">HTTP (</span><strong>Hypertext Transfer Protoco</strong><span style="line-height: 1.5;">l) is perhaps the most popular application protocol used in the Internet (or The WEB).</span></p>
-<p>HTTP is an asymmetric request-response client-server protocol as illustrated.  An HTTP client sends a request message to an HTTP server.  The server, in turn, returns a response message.</p>
-<p>In other words, HTTP is a pull protocol, the client pulls information from the server (instead of server pushes information down to the client).</p>
-<p>HTTP is a client-server application-level protocol.</p>
-<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP.png" alt="HTTP"></a></p>
-<p><strong>① http response message</strong></p>
-<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" alt="HTTP_ResponseMessageExample"></a></p>
-<p><strong>② http request message</strong></p>
-<p><a href="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/HTTP_RequestMessageExample.png" alt="HTTP_RequestMessageExample"></a></p>
-		<!-- only display read_more button if there's more to display -->
-		<a type="button" style="font-size:15px" href="/2016/01/28/931/#more" class="more">Read More...</a>
 	
 	</div>
 </div>

@@ -101,6 +101,78 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2015/01/21/158/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (四)：Deep Into &#39;Array&#39;</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+	
+		<h3 id="Array-sort-comparator"><a href="#Array-sort-comparator" class="headerlink" title="Array.sort(comparator)"></a>Array.sort(comparator)</h3><ul>
+<li><p><strong>no comparator</strong>
+Array.sort() do string comparison(<span style="color: #000080;"><strong>ASCII</strong></span>)</p>
+<pre class="lang:js decode:true">[1, 2, 21, 3, -4].sort();
+//=> -4, 1, 2, 21, 3</pre>
+</li>
+<li><p><strong>self-define comparator</strong>
+<pre class="lang:js decode:true">
+var employees = [];
+employees[0] = {
+name: “George”,
+age: 32,
+retiredate: “March 12, 2014”
+};
+<br>
+employees[1] = {
+name: “Edward”,
+age: 17,
+retiredate: “June 2, 2023”
+};
+<br>
+employees[2] = {
+name: “Christine”,
+age: 58,
+retiredate: “December 20, 2036”
+};
+<br>
+employees[3] = {
+name: “Sarah”,
+age: 62,
+retiredate: “April 30, 2020”
+};
+<br>
+// retiredate ASC
+employees.sort(function(a, b) {
+return new Date(a.retiredate) - new Date(b.retiredate)
+});
+<br>
+// age ASC
+employees.sort(function(a, b) {
+return a.age - b.age
+});
+</pre>
+类似</p>
+</li>
+</ul>
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2015/01/21/158/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2015/01/20/146/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Javascript (三)：Constructor Function</div>
@@ -206,64 +278,6 @@ onum.toString();
 //onum =&gt;primitive
 </code></pre><p>
 &nbsp;</p>
-
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2015/01/12/105/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Javascript (一)：Functions As First-Class Things</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<blockquote>
-<p>The term “first-class” means that something is just a value. A first-class function is one that can go anywhere that any other value can go—there are few to no restrictions. A number in JavaScript is surely a first-class thing, and therefore a first-class function has a similar nature.</p>
-<p>术语“<strong>first-class</strong>”仅表示一个数值，基础类Function可以出现“数值”能出现的任何地方（几乎没有限制）。number确实基础类在javascript中，因此基本类Function有相似的特性：</p>
-</blockquote>
-<ul>
-<li><p>a number can be stored in a variable and so can a function</p>
-<pre class="lang:js decode:true">var fortytwo = function() { return 42 };</pre>
-</li>
-<li><p>a number can be stored in an object field and so can a function:</p>
-<pre class="lang:js decode:true">var fortytwos = [42, function() { return 42 }];
-</pre>
-</li>
-<li><p>a number can be stored in an object field and so can a function:</p>
-<pre class="lang:js decode:true">var fortytwos = {number: 42, fun: function() { return 42 }};</pre>
-</li>
-<li><p>a number can be created as needed and so can a function:</p>
-<pre class="lang:js decode:true">42 + (function() { return 42 })();
-//=> 84</pre>
-</li>
-<li><p>a number can be passed to a function and so can a function:
-<pre class="lang:js decode:true">function weirdAdd(n, f) { return n + f() };</pre></p>
-</li>
-</ul>
-<p>weirdAdd(42, function() { return 42 });
-//=&gt; 84</p>
-<ul>
-<li>a number can be returned from a function and so can a function:<pre class="lang:js decode:true ">
-return 42;
-return function() { return 42 };
-</pre>
-&nbsp;</li>
-</ul>
-<p>&nbsp;</p>
 
 	
 	</div>
