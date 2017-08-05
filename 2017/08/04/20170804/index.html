@@ -209,7 +209,9 @@ EXPLAIN SELECT * FROM salaries where salary ='60929';
 
 <p>第一种（int -&gt; varchar）：’first_name’字段为‘varchar(14)’类型，传入int时，发生“隐式类型转换“，扫描全表。<br>
 第二种（varchar -&gt; int）：’salary’字段为‘int’类型，传入varchar时，能走索引。</p>
-<p>第一： <strong>最左前缀原理</strong></p>
+<ul>
+<li><strong>最左前缀原理</strong></li>
+</ul>
 <pre class="lang:default decode:true ">
 
 +--------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+
@@ -223,7 +225,9 @@ EXPLAIN SELECT * FROM salaries where salary ='60929';
 
 <p>有效索引组合：① emp_no ② emp_no , title ③ emp_no , title ,  from_date
 组合内顺序可以颠倒，mysql查询优化器按索引建立的顺序，“<strong>靠左</strong>”排序。</p>
-<p>情况二：“<strong>隔离列、填坑</strong>”：</p>
+<ul>
+<li><strong>隔离列、填坑</strong></li>
+</ul>
 <pre class="lang:default decode:true ">
 
 EXPLAIN SELECT * FROM employees.titles WHERE emp_no='10001' AND from_date='1986-06-26';
@@ -249,8 +253,6 @@ SELECT DISTINCT(title) FROM employees.titles;
 | Technique Leader   |
 | Manager            |
 +--------------------+
-</pre>
-<pre class="lang:default decode:true ">
 
 EXPLAIN SELECT * FROM employees.titles
 WHERE emp_no='10001'
@@ -262,10 +264,11 @@ AND from_date='1986-06-26';
 |  1 | SIMPLE      | titles | range | PRIMARY       | PRIMARY | 59      | NULL |    7 | Using where |
 +----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+
 </pre>
-“填坑”可以提升性能，如果title值过多，用“填坑”不合适，必须建立辅助索引。
-<br>
-情况三：**匹配前缀字符串**
 
+<p>“填坑”可以提升性能，如果title值过多，用“填坑”不合适，必须建立辅助索引。</p>
+<ul>
+<li><strong>匹配前缀字符串</strong></li>
+</ul>
 <pre class="lang:default decode:true ">
 
 EXPLAIN SELECT * FROM employees.titles WHERE emp_no='10001' AND title LIKE 'Senior%';
@@ -275,9 +278,11 @@ EXPLAIN SELECT * FROM employees.titles WHERE emp_no='10001' AND title LIKE 'Seni
 |  1 | SIMPLE      | titles | range | PRIMARY       | PRIMARY | 56      | NULL |    1 | Using where |
 +----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+
 </pre>
-如果通配符%不出现在开头，则可以用到索引。
-<br>
-情况四：**范围查询**
+
+<p>如果通配符%不出现在开头，则可以用到索引。</p>
+<ul>
+<li><strong>范围查询</strong></li>
+</ul>
 <pre class="lang:default decode:true ">
 
 EXPLAIN SELECT * FROM employees.titles WHERE emp_no < '10010' and title='Senior Engineer';
@@ -287,9 +292,14 @@ EXPLAIN SELECT * FROM employees.titles WHERE emp_no < '10010' and title='Senior 
 |  1 | SIMPLE      | titles | range | PRIMARY       | PRIMARY | 4       | NULL |   16 | Using where |
 +----+-------------+--------+-------+---------------+---------+---------+------+------+-------------+
 </pre>
-情况五：**查询条件中含有函数或表达式**
 
-- 函数
+
+<ul>
+<li><strong>查询条件中含有函数或表达式</strong></li>
+</ul>
+<ol>
+<li>函数</li>
+</ol>
 <pre class="lang:default decode:true ">
 
 EXPLAIN SELECT * FROM employees.titles WHERE emp_no='10001' AND left(title, 6)='Senior';
@@ -300,9 +310,9 @@ EXPLAIN SELECT * FROM employees.titles WHERE emp_no='10001' AND left(title, 6)='
 +----+-------------+--------+------+---------------+---------+---------+-------+------+-------------+
 </pre>
 
-<ul>
+<ol>
 <li>表达式</li>
-</ul>
+</ol>
 <pre class="lang:default decode:true ">
 EXPLAIN SELECT * FROM employees.titles WHERE emp_no - 1='10000';
 +----+-------------+--------+------+---------------+------+---------+------+--------+-------------+
