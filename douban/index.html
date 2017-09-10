@@ -97,8 +97,22 @@
 <div class="row post">
 	<!-- cols -->
 	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
+	<div id="top_meta"><div class="col-md-3" id="post_meta" style="float:none;font-size:0.7em"> 
+
+  <!-- date -->
+  
+
+  <!-- categories -->
+    
+
+  <!-- tags -->
+   
+
+    <hr style="margin:0px;">
+  
+</div><!-- col-md-3 -->
+</div>
+	<div class="col-md-9" style="padding-left: 6px;width: 90%">
 	
 
 	<!-- content -->
@@ -130,39 +144,27 @@
 	<!-- comment -->
 	
 <section id="comment">
-  <h2 class="title">Comments</h2>
-
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
   
 </section>
 
 	</div> <!-- col-md-9/col-md-12 -->
-		
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
-
-	<!-- date -->
-	
-
-	<!-- categories -->
-    
-
-	<!-- tags -->
-		
-
-	<!-- toc -->
-	<div class="meta-widget">
-	
-	</div>
-	
-    <hr>
-	
-</div><!-- col-md-3 -->
-
-	</div>
-		
 
 </div><!-- row -->
+
+<script type="text/javascript">
+var disqus_shortname = 'dongc-github-io';
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 
@@ -197,6 +199,8 @@
   $('.fancybox').fancybox();
 })(jQuery);
 </script>
+
+
 
 
 
