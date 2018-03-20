@@ -101,6 +101,40 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2016/07/14/1335/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Linux I/O (二)：A Process Of Reading Disk File</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<h3 id="What’s-IO"><a href="#What’s-IO" class="headerlink" title="What’s IO?"></a>What’s IO?</h3><p><strong>IO</strong>(Input/Output) is a system of communication for information processing systems.<br> structure of information processing system, as follows:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" alt="information processing systems"></a>
+In computing, IO is the communication between an information processing system , such as a computer, and the outside world, possibly a human or another information processing systems, such as keyboards and mouse are input-only devices while devices such as printers are output-only. A writable CD-ROM is both an input and an output device. </p>
+<p>IO is a system of communication, structure of IO system in linux, as follows:</p>
+<p><a href="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" alt="archetectureofkernelio"></a></p>
+<p>由上图可看出：设备驱动作为中间联络人，负责操作系统与设备之间信息交流，不同设备对应不同的设备驱动。
+<br>
+IO subsystem：[向下] 通过安装设备驱动，横向扩展可访问设备种类；[向上]通过封装统一访问入口，降低上层应用访问各设备的复杂度。</p>
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2016/07/14/1335/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2016/01/28/931/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Key In Http Protocol (一)：&#39;Cache-Control&#39;</div>
@@ -163,59 +197,6 @@
 <p><a href="http://odwh5mzb8.bkt.clouddn.com/nio_sendfile.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/nio_sendfile.png" alt="nio_sendfile"></a></p>
 		<!-- only display read_more button if there's more to display -->
 		<a type="button" style="font-size:15px" href="/2015/12/09/717/#more" class="more">Read More...</a>
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2015/11/03/559/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Javascript (六)：Know &#39;Closure&#39; Inside Out?</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry" style="padding-right:12px;">
-  <div class="row">
-	
-	
-		<h3 id="What-is-closure"><a href="#What-is-closure" class="headerlink" title="What is closure?"></a>What is closure?</h3><p>In JavaScript, closures are often regarded as some sort of magical unicorn that only advanced developers can really understand, but truth be told it is just a simple understanding of the scope chain. A closure, as <strong><span style="text-decoration: underline;"><a href="https://en.wikipedia.org/wiki/Douglas_Crockford" target="_blank" rel="external">Douglas Crockford</a></span></strong> says, is simply:</p>
-<blockquote>
-<p>An inner function always has access to the vars and parameters of its outer function, even after the outer function has returned…</p>
-</blockquote>
-<p>The code below is an example of a closure:</p>
-<pre class="lang:default decode:true">
-// ==>进入全局执行上下文
-var dongcCard = card('dongc');
-
-dongcCard();
-
-function card(sname) {
-    var gender = 'male';
-    return function showInfo() {
-        console.log('[carInfo] name:%s gender:%s', sname, gender);
-    }
-}
-</pre>
-
-<p>read above code , have two doubts:</p>
-<ul>
-<li><strong>为何card函数在定义之前，可以被调用？</strong></li>
-<li><strong>为何card函数执行完毕后，card函数中“gender”属性仍然可以被访问？</strong></li>
-</ul>
-<p>究其原由，深入内核底层，一探究竟。</p>
-<h3 id="How-do-javascript-engine-work？"><a href="#How-do-javascript-engine-work？" class="headerlink" title="How do javascript engine work？"></a>How do javascript engine work？</h3><p>The JavaScript interpreter in a browser is implemented as a single thread. Actions or Events being queued in what is called the <span style="color: #000000;"><strong>execution stack</strong></span>. The diagram below is an abstract view of a single threaded stack:
-<a href="/images/ecstack.jpg"><img src="/images/ecstack.jpg" alt="ecstack"></a>
-		<!-- only display read_more button if there's more to display -->
-		<a type="button" style="font-size:15px" href="/2015/11/03/559/#more" class="more">Read More...</a>
 	
 	</div>
 </div>

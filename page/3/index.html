@@ -101,6 +101,59 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2015/11/03/559/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (六)：Know &#39;Closure&#39; Inside Out?</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<h3 id="What-is-closure"><a href="#What-is-closure" class="headerlink" title="What is closure?"></a>What is closure?</h3><p>In JavaScript, closures are often regarded as some sort of magical unicorn that only advanced developers can really understand, but truth be told it is just a simple understanding of the scope chain. A closure, as <strong><span style="text-decoration: underline;"><a href="https://en.wikipedia.org/wiki/Douglas_Crockford" target="_blank" rel="external">Douglas Crockford</a></span></strong> says, is simply:</p>
+<blockquote>
+<p>An inner function always has access to the vars and parameters of its outer function, even after the outer function has returned…</p>
+</blockquote>
+<p>The code below is an example of a closure:</p>
+<pre class="lang:default decode:true">
+// ==>进入全局执行上下文
+var dongcCard = card('dongc');
+
+dongcCard();
+
+function card(sname) {
+    var gender = 'male';
+    return function showInfo() {
+        console.log('[carInfo] name:%s gender:%s', sname, gender);
+    }
+}
+</pre>
+
+<p>read above code , have two doubts:</p>
+<ul>
+<li><strong>为何card函数在定义之前，可以被调用？</strong></li>
+<li><strong>为何card函数执行完毕后，card函数中“gender”属性仍然可以被访问？</strong></li>
+</ul>
+<p>究其原由，深入内核底层，一探究竟。</p>
+<h3 id="How-do-javascript-engine-work？"><a href="#How-do-javascript-engine-work？" class="headerlink" title="How do javascript engine work？"></a>How do javascript engine work？</h3><p>The JavaScript interpreter in a browser is implemented as a single thread. Actions or Events being queued in what is called the <span style="color: #000000;"><strong>execution stack</strong></span>. The diagram below is an abstract view of a single threaded stack:
+<a href="/images/ecstack.jpg"><img src="/images/ecstack.jpg" alt="ecstack"></a>
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2015/11/03/559/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2015/09/11/479/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Refactor (一) ：Refactor As A Routine Work</div>
@@ -174,45 +227,6 @@ Let’s start with an example to see the dangers of <strong>Null</strong>. a nes
 <p><span style="color: #000000;"><strong>How do avoid making NullPointerException ?</strong></span></p>
 		<!-- only display read_more button if there's more to display -->
 		<a type="button" style="font-size:15px" href="/2015/03/11/285/#more" class="more">Read More...</a>
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2015/03/08/273/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Java (一)：Why Use Primitive Types In Java ?</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry" style="padding-right:12px;">
-  <div class="row">
-	
-	
-		<h3 id="Not-everything-in-java-is-an-object"><a href="#Not-everything-in-java-is-an-object" class="headerlink" title="Not everything in java is an object !"></a>Not everything in java is an object !</h3><p>Java has a <strong>dual-type</strong> system, include <strong>Primitive Types</strong> and <strong>Object Types</strong>. Primitive types are <strong>value-based</strong>, but object types are<strong> reference-based</strong>.</p>
-<p>There are <span style="text-decoration: underline;"><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">eight primitive types</a></span> predefined in Java. For each primitive type there is a corresponding wrapper class that is an object type.</p>
-<h3 id="Why-use-primitive-type"><a href="#Why-use-primitive-type" class="headerlink" title="Why use primitive type ?"></a>Why use primitive type ?</h3><p>The most important factor to consider for using primitive types in Java are <strong>performance, </strong>software performance is usually measured in terms of <strong>space</strong> and <strong>time</strong>.</p>
-<p><strong>space. </strong>java can use primitive types to create automatic variables (<strong>local variable </strong>局部变量) that are not references. The variables hold the value, and it’s place on the <strong>stack</strong>(栈) so its much more efficient.</p>
-<p>Creating an object using new isn’t very efficient because new will place objects on the <strong>heap</strong>(堆). This approach would be very costly for small and simple variables.</p>
-<pre class="">a single double occupy 8 bytes , a single Double occupy 24 bytes.
-</pre>
-primitive types创建的局部变量所占的空间，方法执行完后自动被释放掉；object types所占的空间，需触发GC回收, 方才释放。
-<br>
-<br>
-<span style="text-decoration: underline;"><b>Runtime Performance</b></span>
-<br>
-To compare the runtime performances for primitives and objects, we need an algorithm dominated by numerical calculations. For this article I have chosen matrix multiplication, and I compute the time required to multiply two 1000-by-1000 matrices.
-		<!-- only display read_more button if there's more to display -->
-		<a type="button" style="font-size:15px" href="/2015/03/08/273/#more" class="more">Read More...</a>
 	
 	</div>
 </div>

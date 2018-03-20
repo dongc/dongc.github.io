@@ -129,9 +129,107 @@
 		
             
 		
+            
+		
         
         <!-- render other articles -->
         
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
+	<a href="/2018/03/20/20180320/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Java Collection(一)：Array-based Data Structure</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p>底层数据结构基于数组的集合，可以通过“下标”快速定位到指定元素；数组的增、删元素时需要进行数据移动拷贝；数据扩容时，需要进行<code>Arrays.copyOf()</code>。</p>
+<h3 id="Basic-Opertions"><a href="#Basic-Opertions" class="headerlink" title="Basic Opertions"></a>Basic Opertions</h3><blockquote>
+<p><strong>indexing</strong></p>
+</blockquote>
+<ul>
+<li>An obvious choice for implementing the list ADT is to use an array, <code>A</code>, where <code>A[i]</code> stores (a reference to) the element with index i. </li>
+<li>With a representation based on an array <code>A</code>, the <code>get(i)</code> and <code>set(i, e)</code> methods are easy to implement by accessing <code>A[i]</code> (assuming i is a legitimate index).</li>
+</ul>
+<p><img src="./1508127152089.png" alt="Alt text"></p>
+<blockquote>
+<p><strong>insertion</strong></p>
+</blockquote>
+<ul>
+<li>In an operation <code>add(i, o)</code>, we need to make room for the new element by shifting forward the <code>n - i</code> elements <code>A[i], …, A[n - 1]</code></li>
+<li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
+</ul>
+<p>In an <code>add</code> operation, when the array is full, instead of throwing an exception, we can replace the array with a larger one.</p>
+<p><img src="./1508127600345.png" alt="Alt text"></p>
+<blockquote>
+<p><strong>removal</strong></p>
+</blockquote>
+<ul>
+<li>In an operation <code>remove(i)</code>, we need to fill the hole left by the removed element by shifting backward the <code>n - i - 1</code> elements <code>A[i + 1], …, A[n - 1]</code></li>
+<li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
+</ul>
+<p><img src="./1508127749881.png" alt="Alt text"></p>
+<h3 id="Categories"><a href="#Categories" class="headerlink" title="Categories"></a>Categories</h3><ul>
+<li><strong>Fixed-Array</strong> : Array</li>
+<li><strong>Resizable-Array</strong>:  ArrayList, Vector(<code>thread-safe</code>)</li>
+<li><strong>Immutable-Array</strong>:  ImmutableList(<code>Google Guaua</code>) </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Collection</th>
+<th style="text-align:right">thread-safe</th>
+<th style="text-align:center">grow rule</th>
+<th style="text-align:center">init size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ArrayList</td>
+<td style="text-align:right"><code>not</code></td>
+<td style="text-align:center">50% of its size</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:left">Vector</td>
+<td style="text-align:right"><code>yes</code></td>
+<td style="text-align:center">doubles its array size</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:left">ImmutableList</td>
+<td style="text-align:right"><code>yes</code></td>
+<td style="text-align:center">no</td>
+</tr>
+</tbody>
+</table>
+<p> 通过<code>Collections.synchronizedCollection()</code>可以将ArrayList转换为线程安全的List。</p>
+<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>In an array-based implementation of a dynamic list:</p>
+<ul>
+<li>The space used by the data structure is <code>O(n)</code></li>
+<li>Indexing the element at i takes <code>O(1)</code> time</li>
+<li>add and remove run in <code>O(n)</code> time in the worst case</li>
+</ul>
+<h3 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h3><ul>
+<li><code>System.arraycopy()</code> VS <code>Arrays.copyOf()</code>: The difference is that <code>Arrays.copyOf</code> does not only copy elements, it also creates a new array. <code>System.arrayCopy</code> copies into an existing array. </li>
+<li>为什么concurrent包下没有ArrayList的实现？</li>
+</ul>
+
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
            
            <div class="post">
 			  
@@ -226,40 +324,6 @@
 </ul>
 		<!-- only display read_more button if there's more to display -->
 		<a type="button" style="font-size:15px" href="/2016/12/08/1400/#more" class="more">Read More...</a>
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2016/07/14/1335/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Linux I/O (二)：A Process Of Reading Disk File</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry" style="padding-right:12px;">
-  <div class="row">
-	
-	
-		<h3 id="What’s-IO"><a href="#What’s-IO" class="headerlink" title="What’s IO?"></a>What’s IO?</h3><p><strong>IO</strong>(Input/Output) is a system of communication for information processing systems.<br> structure of information processing system, as follows:</p>
-<p><a href="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/information-processing-systems.png" alt="information processing systems"></a>
-In computing, IO is the communication between an information processing system , such as a computer, and the outside world, possibly a human or another information processing systems, such as keyboards and mouse are input-only devices while devices such as printers are output-only. A writable CD-ROM is both an input and an output device. </p>
-<p>IO is a system of communication, structure of IO system in linux, as follows:</p>
-<p><a href="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" target="_blank" rel="external"><img src="http://odwh5mzb8.bkt.clouddn.com/archetectureofkernelio.png" alt="archetectureofkernelio"></a></p>
-<p>由上图可看出：设备驱动作为中间联络人，负责操作系统与设备之间信息交流，不同设备对应不同的设备驱动。
-<br>
-IO subsystem：[向下] 通过安装设备驱动，横向扩展可访问设备种类；[向上]通过封装统一访问入口，降低上层应用访问各设备的复杂度。</p>
-		<!-- only display read_more button if there's more to display -->
-		<a type="button" style="font-size:15px" href="/2016/07/14/1335/#more" class="more">Read More...</a>
 	
 	</div>
 </div>

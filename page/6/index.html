@@ -101,6 +101,57 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2015/01/20/134/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (二)：Primitive Datatype</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<p><strong>Primitive</strong>(原生的) datatype stored in memory <strong>stack</strong>.It’s value is <strong>literally copied</strong>(字面值复制).Even if change the <strong>original</strong>(原始的) value,the copied value remians unchanged.</p>
+<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>undefined</li>
+<li>null</li>
+</ul>
+<p>When a primitive value is used as if it were an object created by a constructor, JavaScript converts it to an object in order to respond to the expression at hand,but then discards the object qualities and changes it back to a primitive value. In the code below, I take primitive values and showcase what happens when the values are treated like objects</p>
+<p><pre class="lang:js decode:true">
+    var pstr = “123”;
+    pstr.toString();
+    // pstr =&gt;Object =&gt;primitive</pre></p>
+<pre><code>var pnum = 123;
+pnum.toString();
+// pnum =&gt;Object =&gt;primitive
+
+var ostr = new String(&quot;123&quot;);
+ostr.toString();
+// ostr =&gt;primitive
+
+var onum = new Number(123);
+onum.toString();
+//onum =&gt;primitive
+</code></pre><p>
+&nbsp;</p>
+
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2015/01/12/105/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Javascript (一)：Functions As First-Class Things</div>

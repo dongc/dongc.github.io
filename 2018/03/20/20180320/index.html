@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java Collection(一)：Array-based Data Structure | 马 又</title>
+  <meta name="author" content="dongc">
+  
+  <meta name="description" content="Brief底层数据结构基于数组的集合，可以通过“下标”快速定位到指定元素；数组的增、删元素时需要进行数据移动拷贝；数据扩容时，需要进行Arrays.copyOf()。
+Basic Opertions
+indexing
+
+
+An obvious choice for implementing the ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Java Collection(一)：Array-based Data Structure"/>
+  <meta property="og:site_name" content="马 又"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/readable.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">马 又</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives/" title="Archives">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/douban/" title="books">
+			  <i class=""></i>Books
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about/" title="About me.">
+			  <i class=""></i>About me
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Java Collection(一)：Array-based Data Structure</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"><div class="col-md-3" id="post_meta" style="float:none;font-size:0.7em"> 
+
+  <!-- date -->
+   
+  <div>
+  <i class="fa fa-clock-o"></i>
+  <font style="color: #b3b3b3;font-style: inherit;font-family:fantasy;">
+  2018-03-20 
+  </font>
+  </div>
+  
+
+  <!-- categories -->
+    
+
+  <!-- tags -->
+   
+
+    <hr style="margin:0px;">
+  
+</div><!-- col-md-3 -->
+</div>
+	<div class="col-md-9" style="padding-left: 6px;width: 90%">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p>底层数据结构基于数组的集合，可以通过“下标”快速定位到指定元素；数组的增、删元素时需要进行数据移动拷贝；数据扩容时，需要进行<code>Arrays.copyOf()</code>。</p>
+<h3 id="Basic-Opertions"><a href="#Basic-Opertions" class="headerlink" title="Basic Opertions"></a>Basic Opertions</h3><blockquote>
+<p><strong>indexing</strong></p>
+</blockquote>
+<ul>
+<li>An obvious choice for implementing the list ADT is to use an array, <code>A</code>, where <code>A[i]</code> stores (a reference to) the element with index i. </li>
+<li>With a representation based on an array <code>A</code>, the <code>get(i)</code> and <code>set(i, e)</code> methods are easy to implement by accessing <code>A[i]</code> (assuming i is a legitimate index).</li>
+</ul>
+<p><img src="./1508127152089.png" alt="Alt text"></p>
+<blockquote>
+<p><strong>insertion</strong></p>
+</blockquote>
+<ul>
+<li>In an operation <code>add(i, o)</code>, we need to make room for the new element by shifting forward the <code>n - i</code> elements <code>A[i], …, A[n - 1]</code></li>
+<li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
+</ul>
+<p>In an <code>add</code> operation, when the array is full, instead of throwing an exception, we can replace the array with a larger one.</p>
+<p><img src="./1508127600345.png" alt="Alt text"></p>
+<blockquote>
+<p><strong>removal</strong></p>
+</blockquote>
+<ul>
+<li>In an operation <code>remove(i)</code>, we need to fill the hole left by the removed element by shifting backward the <code>n - i - 1</code> elements <code>A[i + 1], …, A[n - 1]</code></li>
+<li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
+</ul>
+<p><img src="./1508127749881.png" alt="Alt text"></p>
+<h3 id="Categories"><a href="#Categories" class="headerlink" title="Categories"></a>Categories</h3><ul>
+<li><strong>Fixed-Array</strong> : Array</li>
+<li><strong>Resizable-Array</strong>:  ArrayList, Vector(<code>thread-safe</code>)</li>
+<li><strong>Immutable-Array</strong>:  ImmutableList(<code>Google Guaua</code>) </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Collection</th>
+<th style="text-align:right">thread-safe</th>
+<th style="text-align:center">grow rule</th>
+<th style="text-align:center">init size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ArrayList</td>
+<td style="text-align:right"><code>not</code></td>
+<td style="text-align:center">50% of its size</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:left">Vector</td>
+<td style="text-align:right"><code>yes</code></td>
+<td style="text-align:center">doubles its array size</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:left">ImmutableList</td>
+<td style="text-align:right"><code>yes</code></td>
+<td style="text-align:center">no</td>
+</tr>
+</tbody>
+</table>
+<p> 通过<code>Collections.synchronizedCollection()</code>可以将ArrayList转换为线程安全的List。</p>
+<h3 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h3><p>In an array-based implementation of a dynamic list:</p>
+<ul>
+<li>The space used by the data structure is <code>O(n)</code></li>
+<li>Indexing the element at i takes <code>O(1)</code> time</li>
+<li>add and remove run in <code>O(n)</code> time in the worst case</li>
+</ul>
+<h3 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h3><ul>
+<li><code>System.arraycopy()</code> VS <code>Arrays.copyOf()</code>: The difference is that <code>Arrays.copyOf</code> does not only copy elements, it also creates a new array. <code>System.arrayCopy</code> copies into an existing array. </li>
+<li>为什么concurrent包下没有ArrayList的实现？</li>
+</ul>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2017/08/04/20170804/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+
+</div><!-- row -->
+
+<script type="text/javascript">
+var disqus_shortname = 'dongc-github-io';
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 dongc
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+
+
+    <script type="text/javascript">
+    var disqus_shortname = 'dongc-github-io';
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/03/20/20180320/';
+        this.page.identifier = '/2018/03/20/20180320/';
+        this.page.title = 'Java Collection(一)：Array-based Data Structure';
+    };
+    (function(){
+      var d = document;
+      var dsq = d.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (d.head || d.body).appendChild(dsq);
+    })();
+    </script>
+
+</body>
+   </html>

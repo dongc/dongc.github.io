@@ -101,6 +101,51 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2015/02/01/193/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Javascript (五)：Scope</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h3><p>In javaScript, <strong>scope</strong> is the context in which code is executed.Typically, <strong>scope</strong> is used to define the extent of information hiding—that is, the <strong>visibility(可见性)</strong> or <strong>accessibility(可访问性)</strong> of variables from different parts of the program.</p>
+<ul>
+<li>Global Scope</li>
+<li>Function Scope</li>
+<li>Block Scope</li>
+<li><strong><span style="color: #000080;">Lexical Scope</span></strong></li>
+<li>Dynamic Scope</li>
+</ul>
+<h3 id="Global-Scope"><a href="#Global-Scope" class="headerlink" title="Global Scope"></a>Global Scope</h3><p>The <strong>global scope</strong> is the last stop in the <strong>scope chain </strong>. Therefore, variables defined in the global scope can be accessed from anywhere . <span style="color: #ff0000;">Danger is that<strong> </strong>any piece of code can change global variables for any reason at any time</span>.</p>
+<pre class="lang:js decode:true">// g1 be created in global scope
+var g1 = 123; 
+
+// global scope
+(function() {
+    // g be created in global scope
+    g2 = 123; 
+})();</pre>
+
+<p>变量声明不推荐lack <strong>var</strong>。缺少<strong>var</strong>的变量被称为<strong>implied globals</strong>。 <strong>implied globals</strong>会污染全局环境、导致代码很难管理.</p>
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2015/02/01/193/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2015/01/21/158/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Javascript (四)：Deep Into &#39;Array&#39;</div>
@@ -227,57 +272,6 @@ Math.abs = function(x) {};
 </pre>
 
 <p>&nbsp;</p>
-
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2015/01/20/134/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Javascript (二)：Primitive Datatype</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry" style="padding-right:12px;">
-  <div class="row">
-	
-	
-		<p><strong>Primitive</strong>(原生的) datatype stored in memory <strong>stack</strong>.It’s value is <strong>literally copied</strong>(字面值复制).Even if change the <strong>original</strong>(原始的) value,the copied value remians unchanged.</p>
-<ul>
-<li>string</li>
-<li>number</li>
-<li>boolean</li>
-<li>undefined</li>
-<li>null</li>
-</ul>
-<p>When a primitive value is used as if it were an object created by a constructor, JavaScript converts it to an object in order to respond to the expression at hand,but then discards the object qualities and changes it back to a primitive value. In the code below, I take primitive values and showcase what happens when the values are treated like objects</p>
-<p><pre class="lang:js decode:true">
-    var pstr = “123”;
-    pstr.toString();
-    // pstr =&gt;Object =&gt;primitive</pre></p>
-<pre><code>var pnum = 123;
-pnum.toString();
-// pnum =&gt;Object =&gt;primitive
-
-var ostr = new String(&quot;123&quot;);
-ostr.toString();
-// ostr =&gt;primitive
-
-var onum = new Number(123);
-onum.toString();
-//onum =&gt;primitive
-</code></pre><p>
-&nbsp;</p>
 
 	
 	</div>

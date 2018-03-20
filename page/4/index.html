@@ -101,6 +101,45 @@
 			  
 	
 	<!-- display as entry -->	
+	<a href="/2015/03/08/273/"  style="text-decoration:none">
+		<h3 class="title">
+			<div class="article-title" style="color:#4C4C4C">Java (一)：Why Use Primitive Types In Java ?</div>
+		</h3>
+		</a>
+	
+
+
+			  <div class="entry" style="padding-right:12px;">
+  <div class="row">
+	
+	
+		<h3 id="Not-everything-in-java-is-an-object"><a href="#Not-everything-in-java-is-an-object" class="headerlink" title="Not everything in java is an object !"></a>Not everything in java is an object !</h3><p>Java has a <strong>dual-type</strong> system, include <strong>Primitive Types</strong> and <strong>Object Types</strong>. Primitive types are <strong>value-based</strong>, but object types are<strong> reference-based</strong>.</p>
+<p>There are <span style="text-decoration: underline;"><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">eight primitive types</a></span> predefined in Java. For each primitive type there is a corresponding wrapper class that is an object type.</p>
+<h3 id="Why-use-primitive-type"><a href="#Why-use-primitive-type" class="headerlink" title="Why use primitive type ?"></a>Why use primitive type ?</h3><p>The most important factor to consider for using primitive types in Java are <strong>performance, </strong>software performance is usually measured in terms of <strong>space</strong> and <strong>time</strong>.</p>
+<p><strong>space. </strong>java can use primitive types to create automatic variables (<strong>local variable </strong>局部变量) that are not references. The variables hold the value, and it’s place on the <strong>stack</strong>(栈) so its much more efficient.</p>
+<p>Creating an object using new isn’t very efficient because new will place objects on the <strong>heap</strong>(堆). This approach would be very costly for small and simple variables.</p>
+<pre class="">a single double occupy 8 bytes , a single Double occupy 24 bytes.
+</pre>
+primitive types创建的局部变量所占的空间，方法执行完后自动被释放掉；object types所占的空间，需触发GC回收, 方才释放。
+<br>
+<br>
+<span style="text-decoration: underline;"><b>Runtime Performance</b></span>
+<br>
+To compare the runtime performances for primitives and objects, we need an algorithm dominated by numerical calculations. For this article I have chosen matrix multiplication, and I compute the time required to multiply two 1000-by-1000 matrices.
+		<!-- only display read_more button if there's more to display -->
+		<a type="button" style="font-size:15px" href="/2015/03/08/273/#more" class="more">Read More...</a>
+	
+	</div>
+</div>
+
+			  </div>
+           
+		
+           
+           <div class="post">
+			  
+	
+	<!-- display as entry -->	
 	<a href="/2015/02/12/241/"  style="text-decoration:none">
 		<h3 class="title">
 			<div class="article-title" style="color:#4C4C4C">Python (一)：初学记录</div>
@@ -167,51 +206,6 @@
 <p><span style="color: #0000ff;">几回回来、几回回去、几回回期盼，</span></p>
 <p><span style="color: #0000ff;">几回回牵手难说再见。</span></p>
 
-	
-	</div>
-</div>
-
-			  </div>
-           
-		
-           
-           <div class="post">
-			  
-	
-	<!-- display as entry -->	
-	<a href="/2015/02/01/193/"  style="text-decoration:none">
-		<h3 class="title">
-			<div class="article-title" style="color:#4C4C4C">Javascript (五)：Scope</div>
-		</h3>
-		</a>
-	
-
-
-			  <div class="entry" style="padding-right:12px;">
-  <div class="row">
-	
-	
-		<h3 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h3><p>In javaScript, <strong>scope</strong> is the context in which code is executed.Typically, <strong>scope</strong> is used to define the extent of information hiding—that is, the <strong>visibility(可见性)</strong> or <strong>accessibility(可访问性)</strong> of variables from different parts of the program.</p>
-<ul>
-<li>Global Scope</li>
-<li>Function Scope</li>
-<li>Block Scope</li>
-<li><strong><span style="color: #000080;">Lexical Scope</span></strong></li>
-<li>Dynamic Scope</li>
-</ul>
-<h3 id="Global-Scope"><a href="#Global-Scope" class="headerlink" title="Global Scope"></a>Global Scope</h3><p>The <strong>global scope</strong> is the last stop in the <strong>scope chain </strong>. Therefore, variables defined in the global scope can be accessed from anywhere . <span style="color: #ff0000;">Danger is that<strong> </strong>any piece of code can change global variables for any reason at any time</span>.</p>
-<pre class="lang:js decode:true">// g1 be created in global scope
-var g1 = 123; 
-
-// global scope
-(function() {
-    // g be created in global scope
-    g2 = 123; 
-})();</pre>
-
-<p>变量声明不推荐lack <strong>var</strong>。缺少<strong>var</strong>的变量被称为<strong>implied globals</strong>。 <strong>implied globals</strong>会污染全局环境、导致代码很难管理.</p>
-		<!-- only display read_more button if there's more to display -->
-		<a type="button" style="font-size:15px" href="/2015/02/01/193/#more" class="more">Read More...</a>
 	
 	</div>
 </div>
