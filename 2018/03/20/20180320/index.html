@@ -7,11 +7,9 @@
   <meta name="author" content="dongc">
   
   <meta name="description" content="Brief底层数据结构基于数组的集合，可以通过“下标”快速定位到指定元素；数组的增、删元素时需要进行数据移动拷贝；数据扩容时，需要进行Arrays.copyOf()。
-Basic Opertions
-indexing
+Basic OpertionsIndexing:
 
-
-An obvious choice for implementing the ">
+An obvious choice for implementing the l">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -132,31 +130,24 @@ An obvious choice for implementing the ">
 	  		
 
 	  <h3 id="Brief"><a href="#Brief" class="headerlink" title="Brief"></a>Brief</h3><p>底层数据结构基于数组的集合，可以通过“下标”快速定位到指定元素；数组的增、删元素时需要进行数据移动拷贝；数据扩容时，需要进行<code>Arrays.copyOf()</code>。</p>
-<h3 id="Basic-Opertions"><a href="#Basic-Opertions" class="headerlink" title="Basic Opertions"></a>Basic Opertions</h3><blockquote>
-<p><strong>indexing</strong></p>
-</blockquote>
+<h3 id="Basic-Opertions"><a href="#Basic-Opertions" class="headerlink" title="Basic Opertions"></a>Basic Opertions</h3><p><strong>Indexing:</strong></p>
 <ul>
 <li>An obvious choice for implementing the list ADT is to use an array, <code>A</code>, where <code>A[i]</code> stores (a reference to) the element with index i. </li>
 <li>With a representation based on an array <code>A</code>, the <code>get(i)</code> and <code>set(i, e)</code> methods are easy to implement by accessing <code>A[i]</code> (assuming i is a legitimate index).</li>
 </ul>
-<p><img src="./1508127152089.png" alt="Alt text"></p>
-<blockquote>
-<p><strong>insertion</strong></p>
-</blockquote>
+<p><img src="http://odwh5mzb8.bkt.clouddn.com/blog_08320-1.png" alt="Indexing"></p>
+<p><strong>Insertion:</strong></p>
 <ul>
 <li>In an operation <code>add(i, o)</code>, we need to make room for the new element by shifting forward the <code>n - i</code> elements <code>A[i], …, A[n - 1]</code></li>
 <li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
 </ul>
 <p>In an <code>add</code> operation, when the array is full, instead of throwing an exception, we can replace the array with a larger one.</p>
-<p><img src="./1508127600345.png" alt="Alt text"></p>
-<blockquote>
-<p><strong>removal</strong></p>
-</blockquote>
+<p><img src="http://odwh5mzb8.bkt.clouddn.com/blog_08320-2.png" alt="Indexing"></p>
+<p><strong>Removal:</strong></p>
 <ul>
 <li>In an operation <code>remove(i)</code>, we need to fill the hole left by the removed element by shifting backward the <code>n - i - 1</code> elements <code>A[i + 1], …, A[n - 1]</code></li>
 <li>In the worst case (<code>i = 0</code>), this takes <code>O(n)</code> time</li>
 </ul>
-<p><img src="./1508127749881.png" alt="Alt text"></p>
 <h3 id="Categories"><a href="#Categories" class="headerlink" title="Categories"></a>Categories</h3><ul>
 <li><strong>Fixed-Array</strong> : Array</li>
 <li><strong>Resizable-Array</strong>:  ArrayList, Vector(<code>thread-safe</code>)</li>
